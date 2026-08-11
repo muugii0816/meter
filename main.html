@@ -1,0 +1,2783 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Meter Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dashboard-body">
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18Z"/><path d="M12 12 16 8"/><path d="M8 12h.01"/><path d="M16.5 12h.01"/></svg>
+        </span>
+        <h2>Smart Meter</h2>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-group nav-visible">
+          <a href="#" id="nav-dashboard" class="nav-link active">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+            <span class="nav-label">Хяналтын самбар</span>
+          </a>
+        </div>
+
+        <div class="nav-group nav-visible">
+          <div class="nav-group-title">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg></span>
+            <span class="nav-label">Хөрөнгийн удирдлага</span>
+          </div>
+          <a href="#" id="nav-meter" class="nav-link">Тоолуур</a>
+          <a href="#" id="nav-meter-model" class="nav-link">Тоолуурын загвар</a>
+          <a href="#" id="nav-meter-connection" class="nav-link">Тоолуур холбох цэг</a>
+          <a href="#" id="nav-survey-results" class="nav-link">Судалгааны үр дүн</a>
+          <a href="#" class="nav-link">DCU</a>
+          <a href="#" class="nav-link">Трансформатор</a>
+          <a href="#" class="nav-link">Барилга</a>
+        </div>
+
+        <div class="nav-group nav-visible">
+          <a href="#" id="nav-ai-tool" class="nav-link">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4"/><path d="M12 17v4"/><path d="M3 12h4"/><path d="M17 12h4"/><path d="m5.6 5.6 2.8 2.8"/><path d="m15.6 15.6 2.8 2.8"/><path d="m18.4 5.6-2.8 2.8"/><path d="m8.4 15.6-2.8 2.8"/><circle cx="12" cy="12" r="2.6"/></svg></span>
+            <span class="nav-label">AI Tool</span>
+          </a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-group-title">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5a16 16 0 0 1 20 0"/><path d="M5.5 12.5a11 11 0 0 1 13 0"/><path d="M9 16.5a6 6 0 0 1 6 0"/><circle cx="12" cy="20" r="1"/></svg></span>
+            <span class="nav-label">Холбоо</span>
+          </div>
+          <a href="#" class="nav-link">Онлайн төлөв</a>
+          <a href="#" class="nav-link">PLC</a>
+          <a href="#" class="nav-link">Дохио</a>
+          <a href="#" class="nav-link">Оношилгоо</a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-group-title">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-7"/></svg></span>
+            <span class="nav-label">Тоолуурын өгөгдөл</span>
+          </div>
+          <a href="#" class="nav-link">Бодит цаг</a>
+          <a href="#" class="nav-link">Ачааллын профайл</a>
+          <a href="#" class="nav-link">Төлбөр тооцоо</a>
+          <a href="#" class="nav-link">Өдөр тутмын</a>
+          <a href="#" class="nav-link">Сар тутмын</a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-group-title">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .33 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.33 1.7 1.7 0 0 0-1.03 1.55V21a2 2 0 1 1-4 0v-.08A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1.03H3a2 2 0 1 1 0-4h.08A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.33-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1.03-1.55V3a2 2 0 1 1 4 0v.08c0 .69.4 1.32 1.03 1.55.63.26 1.37.13 1.87-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.46.5-.59 1.24-.33 1.87.23.63.86 1.03 1.55 1.03H21a2 2 0 1 1 0 4h-.08c-.69 0-1.32.4-1.55 1.03Z"/></svg></span>
+            <span class="nav-label">Үйл ажиллагаа</span>
+          </div>
+          <a href="#" class="nav-link">Заалт авах</a>
+          <a href="#" class="nav-link">Тасалдал</a>
+          <a href="#" class="nav-link">Холболт сэргээх</a>
+          <a href="#" class="nav-link">Firmware</a>
+          <a href="#" class="nav-link">Тохиргоо</a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-group-title">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
+            <span class="nav-label">Дохиолол &amp; Үйл явдал</span>
+          </div>
+          <a href="#" class="nav-link">Гэмтээлт</a>
+          <a href="#" class="nav-link">Холбоо</a>
+          <a href="#" class="nav-link">Хүчдэл</a>
+          <a href="#" class="nav-link">Гүйдэл</a>
+          <a href="#" class="nav-link">Тэжээл тасрал</a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-group-title">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21.2 8.4A10 10 0 1 1 15.6 2.8"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></span>
+            <span class="nav-label">Тайлан &amp; Шинжилгээ</span>
+          </div>
+          <a href="#" class="nav-link">Тайлан</a>
+          <a href="#" class="nav-link">Шинжилгээ</a>
+        </div>
+
+        <div class="nav-group">
+          <a href="#" class="nav-link">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/></svg></span>
+            <span class="nav-label">GIS</span>
+          </a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-group-title">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
+            <span class="nav-label">Удирдлага</span>
+          </div>
+          <a href="#" class="nav-link">Хэрэглэгчид</a>
+          <a href="#" class="nav-link">Эрхийн түвшин</a>
+          <a href="#" class="nav-link">Тохиргоо</a>
+        </div>
+      </nav>
+
+      <div class="system-health">
+        <h3>System Health</h3>
+        <div class="health-meter">
+          <div class="health-meter-label">
+            <span>Server CPU</span>
+            <span id="healthCpuValue">21%</span>
+          </div>
+          <div class="health-bar"><span id="healthCpuBar" style="width: 21%"></span></div>
+        </div>
+
+        <ul class="health-status-list">
+          <li><span>Database</span><span class="status-pill status-healthy">Healthy</span></li>
+          <li><span>MQTT Broker</span><span class="status-pill status-healthy">Healthy</span></li>
+          <li><span>Redis</span><span class="status-pill status-healthy">Healthy</span></li>
+          <li><span>API</span><span class="status-pill status-healthy">Healthy</span></li>
+        </ul>
+
+        <div class="health-meter">
+          <div class="health-meter-label">
+            <span>Disk Usage</span>
+            <span>54%</span>
+          </div>
+          <div class="health-bar"><span style="width: 54%"></span></div>
+        </div>
+
+        
+        <div class="health-meter">
+          <div class="health-meter-label">
+            <span>Memory</span>
+            <span>38%</span>
+          </div>
+          <div class="health-bar"><span style="width: 38%"></span></div>
+        </div>
+
+        <p class="health-backup">Last Backup: <strong>Today 02:00</strong></p>
+      </div>
+    </aside>
+
+    <div class="main-area">
+      <header class="topbar">
+        <h1 id="pageTitle">Smart Meter Engineering Dashboard</h1>
+
+        <div class="topbar-actions">
+          <span class="topbar-clock" id="liveClock">--:--:--</span>
+
+          <button type="button" class="icon-button" id="fullscreenButton" title="Дэлгэц дүүргэх">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+          </button>
+
+          <button type="button" class="icon-button notification-button" title="Мэдэгдэл">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+            <span class="badge" id="notificationBadge">24</span>
+          </button>
+
+          <div class="profile-menu">
+            <button type="button" class="profile-button" id="profileButton">
+              <span class="profile-avatar"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
+              <span class="profile-name" id="welcome">Engineer</span>
+              <span class="profile-caret">▾</span>
+            </button>
+            <div class="profile-dropdown" id="profileDropdown">
+              <button type="button" id="signOutButton">Гарах</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <p id="description" class="page-description">Тоолуурын бүртгэлийн мэдээлэл, холбогдол, болон эрчим хүчний хэрэглээг харна.</p>
+
+      <div class="view" id="view-dashboard">
+      <div class="stat-grid">
+        <article class="stat-card">
+          <span class="stat-icon icon-blue"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+          <p class="stat-title">Total Meters</p>
+          <p class="stat-value" id="totalMeters">0</p>
+          <p class="stat-note">100%</p>
+        </article>
+
+        <article class="stat-card">
+          <span class="stat-icon icon-green"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg></span>
+          <p class="stat-title">Online Meters</p>
+          <p class="stat-value" id="connectedMeters">0</p>
+          <p class="stat-note stat-note-green" id="connectedMetersPct">0%</p>
+        </article>
+
+        <article class="stat-card">
+          <span class="stat-icon icon-red"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6"/><path d="m15 9-6 6"/></svg></span>
+          <p class="stat-title">Offline Meters</p>
+          <p class="stat-value" id="disconnectedMeters">0</p>
+          <p class="stat-note stat-note-red" id="disconnectedMetersPct">0%</p>
+        </article>
+
+        <article class="stat-card">
+          <span class="stat-icon icon-orange"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 22 20H2Z"/><path d="M12 10v4"/><path d="M12 17h.01"/></svg></span>
+          <p class="stat-title">Active Alarms</p>
+          <p class="stat-value" id="openAlarms">0</p>
+          <p class="stat-note"><a href="#" id="viewAllAlarms">View All</a></p>
+        </article>
+
+        <article class="stat-card">
+          <span class="stat-icon icon-purple"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg></span>
+          <p class="stat-title">DCU Online</p>
+          <p class="stat-value" id="dcuOnlinePct">0%</p>
+          <p class="stat-note" id="dcuOnlineFraction">0 / 0</p>
+        </article>
+
+        <article class="stat-card">
+          <span class="stat-icon icon-cyan"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19 19 5"/><circle cx="7" cy="7" r="2.2"/><circle cx="17" cy="17" r="2.2"/></svg></span>
+          <p class="stat-title">Read Success Rate</p>
+          <p class="stat-value" id="readSuccessRate">0%</p>
+          <p class="stat-note">Last 24h</p>
+        </article>
+      </div>
+
+      <div class="panel-grid panel-grid-3">
+        <section class="panel">
+          <h2>Communication Health</h2>
+          <div class="donut-wrap">
+            <canvas id="commHealthChart" width="180" height="180"></canvas>
+            <div class="donut-center">
+              <span class="donut-center-value" id="commHealthPct">0%</span>
+              <span class="donut-center-label">Online</span>
+            </div>
+          </div>
+          <ul class="legend-list">
+            <li><span class="legend-dot legend-online"></span>Online <strong id="commOnlineCount">0</strong></li>
+            <li><span class="legend-dot legend-offline"></span>Offline <strong id="commOfflineCount">0</strong></li>
+          </ul>
+          <dl class="kv-list">
+            <div><dt>Last Poll</dt><dd id="lastPoll">--:--:--</dd></div>
+            <div><dt>Last Data Received</dt><dd id="lastDataReceived">--:--:--</dd></div>
+            <div><dt>Avg. Response Time</dt><dd>682 ms</dd></div>
+          </dl>
+        </section>
+
+        <section class="panel panel-gis">
+          <h2>GIS Map</h2>
+          <div class="gis-map" id="gisMap"></div>
+          <ul class="legend-list legend-list-wrap">
+            <li><span class="legend-dot legend-online"></span>Online</li>
+            <li><span class="legend-dot legend-warning"></span>Warning</li>
+            <li><span class="legend-dot legend-offline"></span>Offline</li>
+            <li><span class="legend-square"></span>Substation</li>
+            <li><span class="legend-diamond"></span>DCU/Gateway</li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <h2>Active Alarm Summary</h2>
+          <ul class="alarm-summary" id="alarmSummary"></ul>
+          <a href="#" class="panel-link">View All Alarms →</a>
+        </section>
+      </div>
+
+      <div class="panel-grid panel-grid-4">
+        <section class="panel">
+          <h2>Energy Summary (Today)</h2>
+          <ul class="kv-list kv-list-stacked">
+            <li><span class="kv-icon icon-green"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg></span><span>Energy Today</span><strong id="energyTodayValue">0 kWh</strong></li>
+            <li><span class="kv-icon icon-blue"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9"/><path d="M12 19V5"/><path d="M20 19v-7"/></svg></span><span>Peak Load</span><strong id="peakLoadValue">0 kW</strong></li>
+            <li><span class="kv-icon icon-purple"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 8h14"/></svg></span><span>Avg. Voltage</span><strong>228 V</strong></li>
+            <li><span class="kv-icon icon-orange"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/></svg></span><span>Power Factor</span><strong id="powerFactorValue">0.00</strong></li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <h2>Load Profile (Today)</h2>
+          <div class="chart-box"><canvas id="loadProfileChart"></canvas></div>
+        </section>
+
+        <section class="panel">
+          <h2>Meter Read Success (Last 7 Days)</h2>
+          <div class="chart-box"><canvas id="readSuccessChart"></canvas></div>
+        </section>
+
+        <section class="panel">
+          <h2>DCU Signal Strength</h2>
+          <div class="donut-wrap">
+            <canvas id="dcuSignalChart" width="160" height="160"></canvas>
+            <div class="donut-center">
+              <span class="donut-center-value" id="dcuSignalTotal">0</span>
+              <span class="donut-center-label">Total</span>
+            </div>
+          </div>
+          <ul class="legend-list">
+            <li><span class="legend-dot legend-online"></span>Strong (&gt;-70 dBm)<strong id="dcuStrongCount">0</strong></li>
+            <li><span class="legend-dot legend-warning"></span>Medium (-70~-90 dBm)<strong id="dcuMediumCount">0</strong></li>
+            <li><span class="legend-dot legend-offline"></span>Weak (&lt;-90 dBm)<strong id="dcuWeakCount">0</strong></li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="panel-grid panel-grid-2">
+        <section class="panel panel-table">
+          <h2>Offline DCU / Gateway (Need Attention)</h2>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr><th>Device ID</th><th>Site</th><th>Status</th><th>Offline Duration</th><th>Last Communication</th><th>Reason</th></tr>
+              </thead>
+              <tbody id="offlineDcuBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel panel-table">
+          <h2>Recent Events</h2>
+          <a href="#" class="panel-link panel-link-top">View All →</a>
+          <ul class="event-list" id="recentEvents"></ul>
+        </section>
+      </div>
+      </div>
+
+      <div class="view" id="view-meter" hidden>
+        <div class="stat-grid">
+          <article class="stat-card">
+            <span class="stat-icon icon-blue"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+            <p class="stat-title">Нийт тоолуур</p>
+            <p class="stat-value" id="meterListTotal">0</p>
+            <p class="stat-note">100%</p>
+          </article>
+
+          <article class="stat-card">
+            <span class="stat-icon icon-green"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg></span>
+            <p class="stat-title">Онлайн</p>
+            <p class="stat-value" id="meterListOnline">0</p>
+            <p class="stat-note stat-note-green" id="meterListOnlinePct">0%</p>
+          </article>
+
+          <article class="stat-card">
+            <span class="stat-icon icon-orange"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
+            <p class="stat-title">Анхааруулга</p>
+            <p class="stat-value" id="meterListWarning">0</p>
+            <p class="stat-note" id="meterListWarningPct">0%</p>
+          </article>
+
+          <article class="stat-card">
+            <span class="stat-icon icon-red"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6"/><path d="m15 9-6 6"/></svg></span>
+            <p class="stat-title">Офлайн</p>
+            <p class="stat-value" id="meterListOffline">0</p>
+            <p class="stat-note stat-note-red" id="meterListOfflinePct">0%</p>
+          </article>
+
+          <article class="stat-card">
+            <span class="stat-icon icon-purple"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg></span>
+            <p class="stat-title">Өнөөдрийн хэрэглээ</p>
+            <p class="stat-value" id="meterListTodayUsage">0 kWh</p>
+            <p class="stat-note" id="meterListYesterdayUsage">Өчигдөр 0 kWh</p>
+          </article>
+
+          <article class="stat-card">
+            <span class="stat-icon icon-cyan"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9"/><path d="M12 19V5"/><path d="M20 19v-7"/></svg></span>
+            <p class="stat-title">Оргил ачаалал</p>
+            <p class="stat-value" id="meterListPeakLoad">0 MW</p>
+            <p class="stat-note" id="meterListPeakTime">--:-- цагт</p>
+          </article>
+        </div>
+
+        <div class="filter-bar">
+          <div class="filter-field">
+            <label>Байршил / Дэд станц</label>
+            <select id="filterLocation"><option value="">Бүгд</option></select>
+          </div>
+          <div class="filter-field">
+            <label>Групп</label>
+            <select id="filterGroup"><option value="">Бүгд</option></select>
+          </div>
+          <div class="filter-field">
+            <label>Статус</label>
+            <select id="filterStatus">
+              <option value="">Бүгд</option>
+              <option value="connected">Онлайн</option>
+              <option value="disconnected">Офлайн</option>
+            </select>
+          </div>
+          <div class="filter-field">
+            <label>Тоолуурын төрөл</label>
+            <select id="filterType"><option value="">Бүгд</option></select>
+          </div>
+          <div class="filter-field filter-search">
+            <label>Хайх</label>
+            <input type="search" id="filterSearch" placeholder="Тоолуурын ID, серийн дугаар, хэрэглэгч..." />
+          </div>
+          <button type="button" class="ghost-button" id="resetFiltersButton">Шүүлт дахин тохируулах</button>
+          <button type="button" class="export-button" id="exportButton">Экспорт</button>
+
+          <div class="view-mode-toggle">
+            <button type="button" class="view-mode-button" id="meterViewModeTreeButton">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h6v6H4z"/><path d="M14 4h6v6h-6z"/><path d="M14 14h6v6h-6z"/><path d="M7 10v4h7"/></svg>
+              Мод
+            </button>
+            <button type="button" class="view-mode-button active" id="meterViewModeTableButton">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M9 4v16"/></svg>
+              Хүснэгт
+            </button>
+          </div>
+        </div>
+
+        <section class="panel panel-table" id="meterTablePanel">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Meter ID</th>
+                  <th>Серийн дугаар</th>
+                  <th>Тоолуурын нэр</th>
+                  <th>Төрөл</th>
+                  <th>Хэрэглэгч</th>
+                  <th>Байршил</th>
+                  <th>Дэд станц</th>
+                  <th>DCU</th>
+                  <th>Холболт</th>
+                  <th>Сүүлийн дата</th>
+                  <th>Статус</th>
+                  <th>Alarm</th>
+                </tr>
+              </thead>
+              <tbody id="meterListBody"></tbody>
+            </table>
+          </div>
+          <div class="table-footer">
+            <span id="meterListSummary">Нийт 0 тоолуур</span>
+            <div class="table-pagination">
+              <select id="pageSizeSelect">
+                <option value="10">10 / хуудас</option>
+                <option value="25">25 / хуудас</option>
+                <option value="50">50 / хуудас</option>
+              </select>
+              <button type="button" class="icon-button" id="prevPageButton">‹</button>
+              <span id="pageIndicator">1 / 1</span>
+              <button type="button" class="icon-button" id="nextPageButton">›</button>
+            </div>
+          </div>
+        </section>
+
+        <div class="meter-tree-layout" id="meterTreeLayout" hidden>
+          <section class="panel meter-tree-panel">
+            <div class="panel-header-row">
+              <h2>Бүтцийн мод</h2>
+              <button type="button" class="ghost-button" id="meterTreeExpandAllButton">Бүгдийг дэлгэх</button>
+            </div>
+            <div class="meter-tree" id="meterTreeContainer"></div>
+          </section>
+
+          <section class="panel meter-tree-detail-panel">
+            <h2>Сонгосон бүлгийн мэдээлэл</h2>
+            <p class="meter-tree-detail-empty" id="meterTreeDetailEmpty">Мод дотроос хүчдэл/фазын бүлэг сонгоно уу.</p>
+            <div id="meterTreeDetailContent" hidden>
+              <div class="meter-tree-detail-header">
+                <span class="meter-tree-detail-title" id="meterTreeDetailTitle"></span>
+                <span class="tag-pill tag-c1" id="meterTreeDetailCountTag"></span>
+              </div>
+              <div class="donut-wrap">
+                <canvas id="meterTreeDetailChart" width="140" height="140"></canvas>
+                <div class="donut-center">
+                  <span class="donut-center-value" id="meterTreeDetailOnlineCount">0</span>
+                  <span class="donut-center-label">Онлайн</span>
+                </div>
+              </div>
+              <ul class="legend-list legend-list-wrap" id="meterTreeDetailLegend"></ul>
+              <div class="meter-tree-detail-stats">
+                <div><span>Нийт чадал</span><strong id="meterTreeDetailPower">0 kW</strong></div>
+                <div><span>Өнөөдрийн хэрэглээ</span><strong id="meterTreeDetailUsage">0 kWh</strong></div>
+                <div><span>Уншилтын амжилт</span><strong id="meterTreeDetailSuccess">0%</strong></div>
+                <div><span>Сүүлийн татлага</span><strong id="meterTreeDetailLastPoll">—</strong></div>
+              </div>
+              <h3>Маркийн задаргаа</h3>
+              <ul class="tree-meter-list" id="meterTreeDetailBrands"></ul>
+              <h3>Анхаарах шаардлагатай</h3>
+              <ul class="alert-list" id="meterTreeDetailAlerts"></ul>
+              <button type="button" class="primary-button meter-tree-view-all-button" id="meterTreeViewAllButton">Бүлгийн бүх тоолуур харах</button>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="view" id="view-meter-model" hidden>
+        <div class="table-toolbar">
+          <h2>Тоолуурын загварын жагсаалт</h2>
+          <div class="table-toolbar-actions">
+            <div class="engine-toggle-inline" id="meterModelRefreshEngineToggle">
+              <button type="button" data-engine="cloud" class="active">Cloud</button>
+              <button type="button" data-engine="offline">Offline</button>
+            </div>
+            <button type="button" class="ghost-button" id="refreshMeterModelButton">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+              Тоолуурын загварын мэдээлэл шинэчлэх
+            </button>
+            <button type="button" class="primary-button" id="addMeterModelButton">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+              Загвар нэмэх
+            </button>
+          </div>
+        </div>
+
+        <p class="meter-model-refresh-status" id="meterModelRefreshStatus" hidden></p>
+        <div class="meter-model-refresh-progress" id="meterModelRefreshProgress" hidden>
+          <div class="meter-model-refresh-progress-fill" id="meterModelRefreshProgressFill"></div>
+        </div>
+
+        <section class="panel panel-table">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Марк</th>
+                  <th>Модель</th>
+                  <th>Үйлдвэрлэгч</th>
+                  <th>Төрөл</th>
+                  <th>Тоо ширхэг</th>
+                  <th>Фаз</th>
+                  <th>Тоолуурын төрөл</th>
+                  <th>Стандарт</th>
+                  <th>Дамжуулах горим</th>
+                  <th>Үйлдэл</th>
+                </tr>
+                <tr class="table-filter-row" id="meterModelFilterRow">
+                  <th><input type="text" class="table-filter-input" data-filter-col="brand" placeholder="Хайх..." /></th>
+                  <th><input type="text" class="table-filter-input" data-filter-col="model" placeholder="Хайх..." /></th>
+                  <th><input type="text" class="table-filter-input" data-filter-col="manufacturer" placeholder="Хайх..." /></th>
+                  <th><input type="text" class="table-filter-input" data-filter-col="type" placeholder="Хайх..." /></th>
+                  <th><input type="text" class="table-filter-input" data-filter-col="quantity" placeholder="Хайх..." /></th>
+                  <th><input type="text" class="table-filter-input" data-filter-col="phase" placeholder="Хайх..." /></th>
+                  <th><input type="text" class="table-filter-input" data-filter-col="meterType" placeholder="Хайх..." /></th>
+                  <th><input type="text" class="table-filter-input" data-filter-col="standard" placeholder="Хайх..." /></th>
+                  <th><input type="text" class="table-filter-input" data-filter-col="dataTransmission" placeholder="Хайх..." /></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="meterModelBody"></tbody>
+            </table>
+          </div>
+          <div class="table-footer">
+            <span id="meterModelSummary">Нийт 0 загвар</span>
+          </div>
+        </section>
+      </div>
+
+      <div class="modal-overlay" id="meterModelModalOverlay" hidden>
+        <div class="modal">
+          <div class="modal-header">
+            <h2 id="meterModelModalTitle">Тоолуурын загвар нэмэх</h2>
+            <button type="button" class="icon-button" id="meterModelModalClose">✕</button>
+          </div>
+          <form id="meterModelForm">
+            <div class="modal-body">
+              <p class="modal-error" id="meterModelFormError" hidden></p>
+              <div class="datasheet-load-row">
+                <button type="button" class="ghost-button" id="meterModelLoadDatasheetButton">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 8 5-5 5 5"/><path d="M5 21h14"/></svg>
+                  Дата шийт ачаалах
+                </button>
+                <input type="file" id="meterModelDatasheetInput" accept="application/pdf" hidden />
+                <button type="button" class="ghost-button" id="meterModelLoadPhotoButton">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.2"/><path d="m21 16-4.5-4.5a1.5 1.5 0 0 0-2.1 0L7 19"/></svg>
+                  Бодит зураг ачаалах
+                </button>
+                <span class="datasheet-load-status" id="meterModelDatasheetStatus" hidden></span>
+              </div>
+              <div class="form-grid">
+                <div class="form-field">
+                  <label for="meterModelBrand">Марк *</label>
+                  <input type="text" id="meterModelBrand" required />
+                </div>
+                <div class="form-field">
+                  <label for="meterModelModel">Модель</label>
+                  <input type="text" id="meterModelModel" />
+                </div>
+                <div class="form-field">
+                  <label for="meterModelManufacturer">Үйлдвэрлэгч</label>
+                  <input type="text" id="meterModelManufacturer" />
+                </div>
+                <div class="form-field">
+                  <label for="meterModelType">Төрөл</label>
+                  <input type="text" id="meterModelType" placeholder="Жишээ: 1 фаз электрон" />
+                </div>
+                <div class="form-field">
+                  <label for="meterModelQuantity">Тоо ширхэг</label>
+                  <input type="number" id="meterModelQuantity" min="0" step="1" />
+                </div>
+                <div class="form-field">
+                  <label for="meterModelPhase">Фаз</label>
+                  <input type="text" id="meterModelPhase" placeholder="Жишээ: 1, 3" />
+                </div>
+                <div class="form-field">
+                  <label for="meterModelMeterType">Тоолуурын төрөл</label>
+                  <input type="text" id="meterModelMeterType" placeholder="Жишээ: Ухаалаг тоолуур" />
+                </div>
+                <div class="form-field">
+                  <label for="meterModelStandard">Стандарт</label>
+                  <input type="text" id="meterModelStandard" placeholder="Жишээ: IEC 62053-21" />
+                </div>
+                <div class="form-field form-field-wide">
+                  <label for="meterModelDataTransmission">Дамжуулах горим</label>
+                  <input type="text" id="meterModelDataTransmission" />
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="ghost-button" id="meterModelCancelButton">Цуцлах</button>
+              <button type="submit" class="primary-button" id="meterModelSaveButton">Хадгалах</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="view" id="view-meter-connection" hidden>
+        <section class="panel org-tree-panel">
+          <div class="panel-header-row">
+            <h2>Холболтын мод</h2>
+            <button type="button" class="ghost-button" id="connRefreshButton">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+              Шинэчлэх
+            </button>
+          </div>
+          <p class="org-tree-hint">Тоолуур холбогдсон бодит сүлжээний бүтэц. Ногоон хайрцаг дээр дарж холбогдсон тоолуурын жагсаалтыг харна уу.</p>
+          <div class="org-tree-scroll" id="orgTreeScroll">
+            <div class="org-tree-forest" id="orgTreeContainer"></div>
+          </div>
+        </section>
+      </div>
+
+      <div class="view" id="view-survey-results" hidden>
+        <p class="survey-hint">Одоо бүртгэлтэй <span id="surveyHintTotal">0</span> тоолуурын өгөгдөл дээр үндэслэсэн бодит тооцоо.</p>
+        <div class="stat-grid survey-stat-grid" id="surveyStatGrid">
+          <article class="stat-card survey-stat-card">
+            <p class="stat-title">Нийт тоолуур</p>
+            <p class="survey-stat-value" id="surveyTotal">0 <span class="survey-stat-unit">ш</span></p>
+            <p class="survey-stat-sub">Судалгаанд хамрагдсан</p>
+            <div class="survey-progress-track"><div class="survey-progress-fill" id="surveyTotalBar" style="width: 100%"></div></div>
+          </article>
+
+          <article class="stat-card survey-stat-card">
+            <p class="stat-title">Алсын уншилтад бэлэн</p>
+            <p class="survey-stat-value" id="surveyRemoteReady">0 <span class="survey-stat-unit">ш</span></p>
+            <p class="survey-stat-sub">Мэдээлэл зайнаас авах боломжтой загвар</p>
+            <div class="survey-progress-track"><div class="survey-progress-fill" id="surveyRemoteReadyBar"></div></div>
+          </article>
+
+          <article class="stat-card survey-stat-card">
+            <p class="stat-title">Алсын удирдлагатай</p>
+            <p class="survey-stat-value" id="surveyRemoteControl">0 <span class="survey-stat-unit">ш</span></p>
+            <p class="survey-stat-sub">Таслах, залгах боломжтой ухаалаг загвар</p>
+            <div class="survey-progress-track"><div class="survey-progress-fill" id="surveyRemoteControlBar"></div></div>
+          </article>
+
+          <article class="stat-card survey-stat-card">
+            <p class="stat-title">HES-д холбох боломжтой</p>
+            <p class="survey-stat-value" id="surveyHesCapable">0 <span class="survey-stat-unit">ш</span></p>
+            <p class="survey-stat-sub">Бодит сүлжээний зангилаанд бүртгэлтэй (ХТП/дэд станц)</p>
+            <div class="survey-progress-track"><div class="survey-progress-fill" id="surveyHesCapableBar"></div></div>
+          </article>
+
+          <article class="stat-card survey-stat-card">
+            <p class="stat-title">HES-д холбогдсон</p>
+            <p class="survey-stat-value" id="surveyHesConnected">0 <span class="survey-stat-unit">ш</span></p>
+            <p class="survey-stat-sub">Одоогоор идэвхтэй холболттой</p>
+            <div class="survey-progress-track"><div class="survey-progress-fill" id="surveyHesConnectedBar"></div></div>
+          </article>
+
+          <article class="stat-card survey-stat-card">
+            <p class="stat-title">Нэмэлт төхөөрөмж шаардлагатай</p>
+            <p class="survey-stat-value" id="surveyNeedsEquipment">0 <span class="survey-stat-unit">ш</span></p>
+            <p class="survey-stat-sub">Бодит DCU/сүлжээний зангилаанд бүртгэгдээгүй</p>
+            <div class="survey-progress-track"><div class="survey-progress-fill survey-progress-fill-orange" id="surveyNeedsEquipmentBar"></div></div>
+          </article>
+        </div>
+
+        <section class="panel survey-summary-panel">
+          <h2>Нэвтрүүлэлтийн ерөнхий зураг</h2>
+          <div class="survey-summary-grid">
+            <div class="survey-summary-box">
+              <p class="survey-summary-label">Нийт бүртгэл</p>
+              <p class="survey-summary-value" id="summaryTotal">0</p>
+            </div>
+            <div class="survey-summary-box">
+              <p class="survey-summary-label">Алсын уншилт</p>
+              <p class="survey-summary-value" id="summaryRemoteReady">0</p>
+            </div>
+            <div class="survey-summary-box">
+              <p class="survey-summary-label">HES нийцэл</p>
+              <p class="survey-summary-value" id="summaryHesCapable">0</p>
+            </div>
+            <div class="survey-summary-box">
+              <p class="survey-summary-label">HES холболт</p>
+              <p class="survey-summary-value" id="summaryHesConnected">0</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="view" id="view-ai-tool" hidden>
+        <div class="ai-tool-top">
+          <div class="panel ai-prompt-panel">
+            <label class="ai-prompt-label" for="aiPromptInput">AI Хүсэлт (Prompt)</label>
+            <div class="ai-prompt-row">
+              <input type="text" id="aiPromptInput" placeholder="Жишээ: 2024 оны 5 сард хэвийн бус хэрэглээтэй тоолуурыг харуул" />
+              <button type="button" class="primary-button" id="aiPromptButton">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                Хүсэлт илгээх
+              </button>
+            </div>
+            <p class="ai-prompt-hint" id="aiPromptResult">Түлхүүр үг оруулаад хүсэлт илгээхэд Meter ID, байгууллага, байршил, төрөл, AI дүгнэлт талбаруудаас хайна.</p>
+          </div>
+
+          <article class="stat-card">
+            <span class="stat-icon icon-blue"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+            <p class="stat-title">Нийт тоолуур</p>
+            <p class="stat-value" id="aiStatTotal">0</p>
+          </article>
+
+          <article class="stat-card">
+            <span class="stat-icon icon-green"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg></span>
+            <p class="stat-title">Идэвхтэй</p>
+            <p class="stat-value" id="aiStatActive">0</p>
+          </article>
+
+          <article class="stat-card">
+            <span class="stat-icon icon-orange"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 22 20H2Z"/><path d="M12 10v4"/><path d="M12 17h.01"/></svg></span>
+            <p class="stat-title">Сэрэмжлүүлэгтэй</p>
+            <p class="stat-value" id="aiStatWarning">0</p>
+          </article>
+
+          <article class="stat-card">
+            <span class="stat-icon icon-red"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.8 0"/></svg></span>
+            <p class="stat-title">Идэвхгүй</p>
+            <p class="stat-value" id="aiStatInactive">0</p>
+          </article>
+        </div>
+
+        <div class="filter-bar">
+          <div class="filter-field">
+            <label>Байгууллагын нэр</label>
+            <select id="aiFilterCompany"><option value="">Бүгд</option></select>
+          </div>
+          <div class="filter-field">
+            <label>Тоолуурын төрөл</label>
+            <select id="aiFilterType"><option value="">Бүгд</option></select>
+          </div>
+          <div class="filter-field">
+            <label>Байршил</label>
+            <select id="aiFilterLocation"><option value="">Бүгд</option></select>
+          </div>
+          <div class="filter-field">
+            <label>Статус</label>
+            <select id="aiFilterStatus">
+              <option value="">Бүгд</option>
+              <option value="Идэвхтэй">Идэвхтэй</option>
+              <option value="Сэрэмжлүүлэгтэй">Сэрэмжлүүлэгтэй</option>
+              <option value="Идэвгүй">Идэвгүй</option>
+            </select>
+          </div>
+          <div class="filter-field">
+            <label>Огнооны хүрээ</label>
+            <div class="filter-date-range">
+              <input type="date" id="aiFilterDateFrom" />
+              <span>~</span>
+              <input type="date" id="aiFilterDateTo" />
+            </div>
+          </div>
+          <button type="button" class="ghost-button" id="aiApplyFiltersButton">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54Z"/></svg>
+            Шүүлт нэмэх
+          </button>
+        </div>
+
+        <section class="panel panel-table">
+          <div class="table-toolbar">
+            <h2>Тоолуурын мэдээлэл</h2>
+            <div class="table-toolbar-actions">
+              <button type="button" class="ghost-button" id="aiManageColumnsButton" title="Багана удирдах">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="16" rx="1"/><rect x="14" y="4" width="7" height="16" rx="1"/></svg>
+                Багана удирдах
+              </button>
+              <button type="button" class="export-button" id="aiExportButton">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+                Экспорт
+              </button>
+              <button type="button" class="icon-button" id="aiFullscreenButton" title="Дэлгэц дүүргэх">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th class="col-checkbox"><input type="checkbox" id="aiSelectAll" /></th>
+                  <th>№</th>
+                  <th>Тоолуурын дугаар</th>
+                  <th>Байгууллагын нэр</th>
+                  <th>Тоолуурын төрөл</th>
+                  <th>Байршил</th>
+                  <th>Сүүлийн уншилт</th>
+                  <th>Уншилтын огноо</th>
+                  <th>Хэрэглээ (кВт.ц)<br />Сонгосон хугацаа</th>
+                  <th>Статус</th>
+                  <th>AI дүгнэлт</th>
+                </tr>
+              </thead>
+              <tbody id="aiTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="table-footer">
+            <span id="aiTableSummary">Нийт 0 бичлэгээс 0-0 харуулж байна</span>
+            <div class="table-pagination">
+              <select id="aiPageSizeSelect">
+                <option value="10">10 / хуудас</option>
+                <option value="25" selected>25 / хуудас</option>
+                <option value="50">50 / хуудас</option>
+              </select>
+              <button type="button" class="icon-button" id="aiPrevPageButton">‹</button>
+              <span id="aiPageIndicator">1 / 1</span>
+              <button type="button" class="icon-button" id="aiNextPageButton">›</button>
+            </div>
+          </div>
+        </section>
+
+        <div class="panel-grid panel-grid-3">
+          <section class="panel">
+            <h2>Хэрэглээний график (сонгосон хугацаа)</h2>
+            <div class="chart-box"><canvas id="aiUsageChart"></canvas></div>
+          </section>
+
+          <section class="panel">
+            <h2>AI дүгнэлтийн тойм</h2>
+            <div class="donut-wrap">
+              <canvas id="aiAssessmentChart" width="160" height="160"></canvas>
+              <div class="donut-center">
+                <span class="donut-center-value" id="aiAssessmentTotal">0</span>
+                <span class="donut-center-label">Нийт</span>
+              </div>
+            </div>
+            <ul class="legend-list" id="aiAssessmentLegend"></ul>
+          </section>
+
+          <section class="panel">
+            <h2>Сүүлийн сэрэмжлүүлгүүд</h2>
+            <ul class="alert-list" id="aiRecentAlerts"></ul>
+          </section>
+        </div>
+      </div>
+
+      <div class="view" id="view-placeholder" hidden>
+        <section class="panel">
+          <h2 id="placeholderTitle"></h2>
+          <p>Энэ хэсэг удахгүй нэмэгдэнэ.</p>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let commHealthChart;
+    let loadProfileChart;
+    let readSuccessChart;
+    let dcuSignalChart;
+
+    let meterListRecords = [];
+    let meterListFiltered = [];
+    let meterListPage = 1;
+    let meterListPageSize = 10;
+    let meterListInitialized = false;
+
+    let meterViewMode = 'table';
+    let meterTreeExpandedKeys = new Set();
+    let meterTreeDefaultExpanded = false;
+    let meterTreeAllExpanded = false;
+    let meterTreeSelectedKey = null;
+    let meterTreeSelectedMeters = [];
+    let meterTreeDetailChart;
+
+    let aiToolRecords = [];
+    let aiToolFiltered = [];
+    let aiToolPage = 1;
+    let aiToolPageSize = 25;
+    let aiToolInitialized = false;
+    let aiUsageChart;
+    let aiAssessmentChart;
+
+    let meterModelRecords = [];
+    let meterModelInitialized = false;
+    let meterModelEditingId = null;
+    let meterModelRefreshEngine = localStorage.getItem('meterModelAiEngine') === 'offline' ? 'offline' : 'cloud';
+    const meterModelFilters = {
+      brand: '',
+      model: '',
+      manufacturer: '',
+      type: '',
+      quantity: '',
+      phase: '',
+      meterType: '',
+      standard: '',
+      dataTransmission: '',
+    };
+
+    let networkTreeInitialized = false;
+    let networkTreeData = [];
+    let networkTreeOpenMeterAssetId = null;
+
+    // Escapes free-text values before they're interpolated into innerHTML.
+    // Most rendered data here comes from imported/read-only records, but a
+    // handful of fields (meter model brand/model/manufacturer/... below) are
+    // typed directly into a form by an authenticated user and re-rendered
+    // for every other authenticated user, so unescaped interpolation would
+    // be a stored-XSS path between staff accounts.
+    function escapeHtml(value) {
+      if (value === null || value === undefined) return '';
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function startClock() {
+      const clockEl = document.getElementById('liveClock');
+      const tick = () => {
+        clockEl.textContent = new Date().toLocaleTimeString('en-GB');
+      };
+      tick();
+      setInterval(tick, 1000);
+    }
+
+    function setupProfileMenu() {
+      const button = document.getElementById('profileButton');
+      const dropdown = document.getElementById('profileDropdown');
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('open');
+      });
+      document.addEventListener('click', () => dropdown.classList.remove('open'));
+    }
+
+    function toggleFullscreen() {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+    }
+
+    function setupFullscreenButton() {
+      document.getElementById('fullscreenButton').addEventListener('click', toggleFullscreen);
+    }
+
+    // ---- Sample data for panels that have no backing database table yet ----
+    function renderGisMap() {
+      const gisMap = document.getElementById('gisMap');
+      const sites = [
+        { name: 'ХТП-1', type: 'substation', status: 'online', x: 45, y: 28 },
+        { name: 'ХТП-2', type: 'substation', status: 'online', x: 18, y: 32 },
+        { name: 'КТПН-15', type: 'dcu', status: 'warning', x: 30, y: 45 },
+        { name: 'КТПН-33', type: 'dcu', status: 'online', x: 22, y: 62 },
+        { name: 'Ус ханган дэд станц', type: 'substation', status: 'offline', x: 20, y: 76 },
+        { name: 'Шанх майнинг КТПН-100', type: 'dcu', status: 'warning', x: 55, y: 70 },
+        { name: 'Ухаа Худаг дэд станц', type: 'substation', status: 'online', x: 78, y: 55 },
+      ];
+
+      const extraDots = 26;
+      let markersHtml = '';
+
+      sites.forEach((site) => {
+        markersHtml += `<div class="gis-marker gis-marker-${site.type} gis-status-${site.status}" style="left:${site.x}%; top:${site.y}%;" title="${site.name}"><span>${site.name}</span></div>`;
+      });
+
+      for (let i = 0; i < extraDots; i += 1) {
+        const status = ['online', 'online', 'online', 'warning', 'offline'][i % 5];
+        const x = 8 + ((i * 37) % 85);
+        const y = 15 + ((i * 53) % 75);
+        markersHtml += `<div class="gis-marker gis-marker-dot gis-status-${status}" style="left:${x}%; top:${y}%;"></div>`;
+      }
+
+      gisMap.innerHTML = markersHtml;
+    }
+
+    function renderAlarmSummary() {
+      const alarms = [
+        { label: 'Communication Failure', count: 12, tone: 'red' },
+        { label: 'Voltage High', count: 5, tone: 'orange' },
+        { label: 'Voltage Low', count: 3, tone: 'orange' },
+        { label: 'Tamper', count: 2, tone: 'purple' },
+        { label: 'Cover Open', count: 1, tone: 'blue' },
+        { label: 'Reverse Energy', count: 1, tone: 'green' },
+        { label: 'Power Failure', count: 0, tone: 'muted' },
+      ];
+
+      document.getElementById('alarmSummary').innerHTML = alarms
+        .map(
+          (a) => `<li><span class="alarm-dot alarm-${a.tone}"></span><span>${a.label}</span><strong>${a.count}</strong></li>`
+        )
+        .join('');
+    }
+
+    function renderOfflineDcuTable() {
+      const rows = [
+        ['DCU-012', 'ХТП-2', 'Offline', '3h 15m', '11:20:10', 'Ping Fail'],
+        ['DCU-028', 'КТПН-33', 'Weak Signal', '1h 02m', '13:33:18', 'GSM Signal Low'],
+        ['DCU-101', 'Ус ханган дэд станц', 'Offline', '25m', '14:09:52', 'No Response'],
+        ['DCU-057', 'КТПН-37', 'Offline', '18m', '14:17:31', 'Power Off'],
+        ['DCU-089', 'Шанх майнинг КТПН-100', 'Weak Signal', '45m', '13:50:10', 'PLC Signal Low'],
+      ];
+
+      document.getElementById('offlineDcuBody').innerHTML = rows
+        .map(([id, site, status, duration, last, reason]) => {
+          const statusClass = status === 'Offline' ? 'status-offline' : 'status-weak';
+          return `<tr><td>${id}</td><td>${site}</td><td><span class="status-pill ${statusClass}">${status}</span></td><td>${duration}</td><td>${last}</td><td>${reason}</td></tr>`;
+        })
+        .join('');
+    }
+
+    function renderRecentEvents() {
+      const events = [
+        ['14:35:18', 'ok', 'Meter 12568 Read Success', 'Meter 12568'],
+        ['14:34:55', 'info', 'DCU-015 Online', 'DCU-015'],
+        ['14:33:42', 'alarm', 'Meter 84211 Tamper Alarm', 'Meter 84211'],
+        ['14:31:27', 'error', 'DCU-028 Communication Lost', 'DCU-028'],
+        ['14:29:19', 'info', 'Firmware Upgrade Completed', 'DCU-036'],
+        ['14:28:11', 'ok', 'Remote Disconnect Success', 'Meter 55621'],
+        ['14:26:59', 'alarm', 'Voltage High Alarm', 'Meter 33210'],
+      ];
+
+      document.getElementById('recentEvents').innerHTML = events
+        .map(
+          ([time, tone, text, tag]) =>
+            `<li><span class="event-dot event-${tone}"></span><span class="event-time">${time}</span><span class="event-text">${text}</span><span class="event-tag">${tag}</span></li>`
+        )
+        .join('');
+    }
+
+    function renderDcuSignalChart() {
+      const strong = 432;
+      const medium = 256;
+      const weak = 59;
+      const total = strong + medium + weak;
+
+      document.getElementById('dcuSignalTotal').textContent = total;
+      document.getElementById('dcuStrongCount').textContent = `${strong} (${((strong / total) * 100).toFixed(1)}%)`;
+      document.getElementById('dcuMediumCount').textContent = `${medium} (${((medium / total) * 100).toFixed(1)}%)`;
+      document.getElementById('dcuWeakCount').textContent = `${weak} (${((weak / total) * 100).toFixed(1)}%)`;
+
+      const ctx = document.getElementById('dcuSignalChart').getContext('2d');
+      if (dcuSignalChart) dcuSignalChart.destroy();
+      dcuSignalChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Strong', 'Medium', 'Weak'],
+          datasets: [{ data: [strong, medium, weak], backgroundColor: ['#10b981', '#f59e0b', '#ef4444'], borderWidth: 0 }],
+        },
+        options: { cutout: '72%', plugins: { legend: { display: false } } },
+      });
+    }
+
+    function renderLoadProfileChart() {
+      const hours = Array.from({ length: 25 }, (_, i) => `${String(i).padStart(2, '0')}:00`);
+      const base = [3, 2.6, 2.3, 2.1, 2, 2.4, 4, 7, 10, 12.5, 14, 15.2, 16, 15.5, 15, 15.8, 16.5, 18.5, 17.8, 15, 11, 8, 5.5, 3.8, 3];
+
+      const ctx = document.getElementById('loadProfileChart').getContext('2d');
+      if (loadProfileChart) loadProfileChart.destroy();
+      loadProfileChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: hours,
+          datasets: [
+            {
+              label: 'MW',
+              data: base,
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.12)',
+              fill: true,
+              tension: 0.35,
+              pointRadius: 0,
+              borderWidth: 2,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { ticks: { maxTicksLimit: 7 } }, y: { beginAtZero: true, title: { display: true, text: 'MW' } } },
+        },
+      });
+    }
+
+    function renderReadSuccessChart() {
+      const days = ['05-16', '05-17', '05-18', '05-19', '05-20', '05-21', '05-22'];
+      const values = [98.5, 98.8, 99.0, 98.9, 99.1, 99.0, 99.1];
+
+      const ctx = document.getElementById('readSuccessChart').getContext('2d');
+      if (readSuccessChart) readSuccessChart.destroy();
+      readSuccessChart = new Chart(ctx, {
+        type: 'bar',
+        data: { labels: days, datasets: [{ label: '%', data: values, backgroundColor: '#10b981', borderRadius: 6 }] },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { min: 0, max: 100 } },
+        },
+      });
+
+      document.getElementById('readSuccessRate').textContent = `${values[values.length - 1]}%`;
+    }
+
+    function renderCommHealthChart(connected, disconnected) {
+      const total = connected + disconnected;
+      const pct = total > 0 ? Math.round((connected / total) * 100) : 0;
+
+      document.getElementById('commHealthPct').textContent = `${pct}%`;
+      document.getElementById('commOnlineCount').textContent = `${connected} (${pct}%)`;
+      document.getElementById('commOfflineCount').textContent = `${disconnected} (${total > 0 ? (100 - pct) : 0}%)`;
+
+      const now = new Date().toLocaleTimeString('en-GB');
+      document.getElementById('lastPoll').textContent = now;
+      document.getElementById('lastDataReceived').textContent = now;
+
+      const ctx = document.getElementById('commHealthChart').getContext('2d');
+      if (commHealthChart) commHealthChart.destroy();
+      commHealthChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Online', 'Offline'],
+          datasets: [{ data: [connected, disconnected], backgroundColor: ['#10b981', '#ef4444'], borderWidth: 0 }],
+        },
+        options: { cutout: '75%', plugins: { legend: { display: false } } },
+      });
+    }
+
+    // ---- Meter list view (Asset Management > Meter) ----
+    // All fields here are real, imported from MCSI meters/meters.xlsx
+    // ("Цэций хороолол" sheet) into the `meters` table. There is no
+    // consumption telemetry in that source data, so energy stays 0.
+    function buildMeterListRecords(meters) {
+      return meters.map((meter) => ({
+        meterId: meter.meterId,
+        customerCode: meter.customerCode || '—',
+        location: meter.facility || '—',
+        type: meter.brand || '—',
+        status: meter.status,
+        verifiedTo: meter.verifiedTo || '—',
+        energy: meter.energy,
+        serialNumber: meter.serialNumber || '—',
+        meterName: meter.meterName || '—',
+        meterType: meter.meterType || '—',
+        customerName: meter.customerName || '—',
+        substation: meter.substation || '—',
+        dcuId: meter.dcuId || '—',
+        lastReadingAt: meter.lastReadingAt || '—',
+        meterStatus: meter.meterStatus || '—',
+        alarm: meter.alarm || '—',
+      }));
+    }
+
+    function populateMeterFilters(records) {
+      const locationSelect = document.getElementById('filterLocation');
+      const typeSelect = document.getElementById('filterType');
+
+      const locations = [...new Set(records.map((r) => r.location))];
+      const types = [...new Set(records.map((r) => r.type))];
+
+      locationSelect.innerHTML = '<option value="">Бүгд</option>' + locations.map((l) => `<option value="${l}">${l}</option>`).join('');
+      typeSelect.innerHTML = '<option value="">Бүгд</option>' + types.map((t) => `<option value="${t}">${t}</option>`).join('');
+    }
+
+    function renderMeterListStats(records) {
+      const total = records.length;
+      const online = records.filter((r) => r.status === 'connected').length;
+      const offline = records.filter((r) => r.status === 'disconnected').length;
+      const warning = 0; // the current schema has no "warning" state yet
+
+      document.getElementById('meterListTotal').textContent = total;
+      document.getElementById('meterListOnline').textContent = online;
+      document.getElementById('meterListOffline').textContent = offline;
+      document.getElementById('meterListWarning').textContent = warning;
+
+      document.getElementById('meterListOnlinePct').textContent = total > 0 ? `${Math.round((online / total) * 100)}%` : '0%';
+      document.getElementById('meterListOfflinePct').textContent = total > 0 ? `${Math.round((offline / total) * 100)}%` : '0%';
+      document.getElementById('meterListWarningPct').textContent = total > 0 ? `${Math.round((warning / total) * 100)}%` : '0%';
+
+      const todayUsage = records.reduce((sum, r) => sum + r.energy, 0);
+      document.getElementById('meterListTodayUsage').textContent = `${todayUsage.toFixed(1)} kWh`;
+      document.getElementById('meterListYesterdayUsage').textContent = `Өчигдөр ${(todayUsage * 0.93).toFixed(1)} kWh`;
+
+      document.getElementById('meterListPeakLoad').textContent = `${(todayUsage / 20).toFixed(1)} MW`;
+      document.getElementById('meterListPeakTime').textContent = `${new Date().toLocaleTimeString('en-GB').slice(0, 5)} цагт`;
+    }
+
+    function applyMeterFilters() {
+      const status = document.getElementById('filterStatus').value;
+      const location = document.getElementById('filterLocation').value;
+      const type = document.getElementById('filterType').value;
+      const search = document.getElementById('filterSearch').value.trim().toLowerCase();
+
+      meterListFiltered = meterListRecords.filter((r) => {
+        if (status && r.status !== status) return false;
+        if (location && r.location !== location) return false;
+        if (type && r.type !== type) return false;
+        if (search && !`${r.meterId} ${r.customerCode}`.toLowerCase().includes(search)) return false;
+        return true;
+      });
+
+      meterListPage = 1;
+      renderMeterListTable();
+      if (meterViewMode === 'tree') {
+        renderMeterTree();
+      }
+    }
+
+    function renderMeterListTable() {
+      const totalPages = Math.max(1, Math.ceil(meterListFiltered.length / meterListPageSize));
+      meterListPage = Math.min(Math.max(1, meterListPage), totalPages);
+
+      const start = (meterListPage - 1) * meterListPageSize;
+      const pageRecords = meterListFiltered.slice(start, start + meterListPageSize);
+
+      document.getElementById('meterListBody').innerHTML = pageRecords
+        .map((r) => {
+          const isOnline = r.status === 'connected';
+          const isActive = r.meterStatus === 'Active';
+          return `<tr>
+            <td>${r.meterId}</td>
+            <td>${r.serialNumber}</td>
+            <td>${r.meterName}</td>
+            <td>${r.meterType}</td>
+            <td>${r.customerName}</td>
+            <td>${r.location}</td>
+            <td>${r.substation}</td>
+            <td>${r.dcuId}</td>
+            <td><span class="conn-cell"><span class="legend-dot ${isOnline ? 'legend-online' : 'legend-offline'}"></span>${isOnline ? 'Online' : 'Offline'}</span></td>
+            <td>${r.lastReadingAt}</td>
+            <td><span class="status-pill ${isActive ? 'status-healthy' : 'status-offline'}">${r.meterStatus}</span></td>
+            <td>${r.alarm}</td>
+          </tr>`;
+        })
+        .join('');
+
+      document.getElementById('meterListSummary').textContent = `Нийт ${meterListFiltered.length} тоолуур`;
+      document.getElementById('pageIndicator').textContent = `${meterListPage} / ${totalPages}`;
+      document.getElementById('prevPageButton').disabled = meterListPage <= 1;
+      document.getElementById('nextPageButton').disabled = meterListPage >= totalPages;
+    }
+
+    function exportMeterListCsv() {
+      const header = [
+        'Meter ID', 'Серийн дугаар', 'Тоолуурын нэр', 'Төрөл', 'Хэрэглэгч', 'Байршил',
+        'Дэд станц', 'DCU', 'Холболт', 'Сүүлийн дата', 'Статус', 'Alarm',
+      ];
+      const lines = [header.join(',')];
+
+      meterListFiltered.forEach((r) => {
+        const isOnline = r.status === 'connected';
+        const fields = [
+          r.meterId, r.serialNumber, r.meterName, r.meterType, r.customerName, r.location,
+          r.substation, r.dcuId, isOnline ? 'Online' : 'Offline', r.lastReadingAt, r.meterStatus, r.alarm,
+        ];
+        lines.push(fields.map((f) => `"${String(f).replace(/"/g, '""')}"`).join(','));
+      });
+
+      const blob = new Blob([`﻿${lines.join('\n')}`], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `meters-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // ---- Meter list "tree" view ----
+    // Groups the same meter records by Дэд станц (substation) -> DCU -> voltage/phase
+    // (looked up from the meter_types catalog by brand, since meters has no
+    // voltage/phase column of its own). Power/usage figures shown per group are
+    // derived deterministically from meter id (no consumption telemetry exists
+    // yet), same convention as the AI Tool view's example fields.
+    const METER_TREE_PHASE_ORDER = ['380v-3p', '220v-1p', 'unknown'];
+    const METER_TREE_ICON_SUBSTATION =
+      '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16"/><path d="M7 9h4"/><path d="M7 13h4"/></svg>';
+    const METER_TREE_ICON_DCU =
+      '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 4v16"/><path d="M15 4v16"/></svg>';
+
+    function getBrandPhaseMap() {
+      const map = {};
+      meterModelRecords.forEach((m) => {
+        if (m.brand) map[m.brand.trim().toLowerCase()] = (m.phase || '').toString();
+      });
+      return map;
+    }
+
+    function classifyVoltagePhase(brand, phaseMap) {
+      const raw = phaseMap[(brand || '').trim().toLowerCase()] || '';
+      if (raw.includes('3')) return { key: '380v-3p', label: '380 В · 3 фаз' };
+      if (raw.includes('1')) return { key: '220v-1p', label: '220 В · 1 фаз' };
+      return { key: 'unknown', label: 'Фаз тодорхойгүй' };
+    }
+
+    function buildMeterTree(records, phaseMap) {
+      const bySubstation = {};
+      records.forEach((r) => {
+        const subKey = r.substation && r.substation !== '—' ? r.substation : 'Тодорхойгүй дэд станц';
+        const dcuKey = r.dcuId && r.dcuId !== '—' ? r.dcuId : 'Тодорхойгүй DCU';
+        const phase = classifyVoltagePhase(r.type, phaseMap);
+
+        if (!bySubstation[subKey]) bySubstation[subKey] = {};
+        if (!bySubstation[subKey][dcuKey]) bySubstation[subKey][dcuKey] = {};
+        if (!bySubstation[subKey][dcuKey][phase.key]) {
+          bySubstation[subKey][dcuKey][phase.key] = { label: phase.label, meters: [] };
+        }
+        bySubstation[subKey][dcuKey][phase.key].meters.push(r);
+      });
+      return bySubstation;
+    }
+
+    function syntheticMeterPowerKw(meterId, phaseKey) {
+      const seed = hashSeed(meterId);
+      return phaseKey === '380v-3p' ? 10 + (seed % 25) + ((seed % 100) / 100) : 0.4 + ((seed % 350) / 100);
+    }
+
+    function meterTreeRowHtml(r, phaseKey) {
+      const isOnline = r.status === 'connected';
+      const power = syntheticMeterPowerKw(r.meterId, phaseKey).toFixed(2);
+      return `<li class="tree-meter-row">
+        <span class="legend-dot ${isOnline ? 'legend-online' : 'legend-offline'}"></span>
+        <span class="tree-meter-id">${r.meterId}</span>
+        <span class="tree-meter-brand">${r.type}</span>
+        <span class="tree-meter-serial">${r.serialNumber}</span>
+        <span class="tree-meter-power">${power} kW</span>
+        <span class="tree-meter-status">${isOnline ? 'Онлайн' : 'Офлайн'}</span>
+      </li>`;
+    }
+
+    function meterTreePhaseGroupHtml(subKey, dcuKey, phaseKey, group) {
+      const groupKey = `${subKey}|||${dcuKey}|||${phaseKey}`;
+      const visibleCount = 3;
+      const visible = group.meters.slice(0, visibleCount);
+      const rest = group.meters.slice(visibleCount);
+      const isSelected = meterTreeSelectedKey === groupKey;
+
+      return `<li class="tree-phase-group ${isSelected ? 'selected' : ''}" data-tree-phase="${groupKey}">
+        <div class="tree-phase-header" data-tree-phase-select="${groupKey}">
+          <span class="tree-node-label">${group.label}</span>
+          <span class="tag-pill tag-c1">${group.meters.length}</span>
+        </div>
+        <ul class="tree-meter-list">${visible.map((r) => meterTreeRowHtml(r, phaseKey)).join('')}</ul>
+        ${rest.length > 0
+          ? `<ul class="tree-meter-list tree-meter-list-extra" hidden>${rest.map((r) => meterTreeRowHtml(r, phaseKey)).join('')}</ul>
+             <button type="button" class="tree-more-link" data-tree-more="${groupKey}">Бусад ${rest.length} тоолуур харах</button>`
+          : ''}
+      </li>`;
+    }
+
+    function meterTreeDcuNodeHtml(subKey, dcuKey, phases) {
+      const groups = Object.values(phases);
+      const totalMeters = groups.reduce((sum, g) => sum + g.meters.length, 0);
+      const onlineMeters = groups.reduce((sum, g) => sum + g.meters.filter((m) => m.status === 'connected').length, 0);
+      const dcuNodeKey = `dcu:${subKey}|||${dcuKey}`;
+      const isOpen = meterTreeExpandedKeys.has(dcuNodeKey);
+
+      return `<li class="tree-node tree-node-dcu">
+        <div class="tree-node-header tree-toggle ${isOpen ? 'tree-toggle-open' : ''}" data-tree-toggle="${dcuNodeKey}">
+          <span class="tree-chevron">▶</span>
+          <span class="tree-node-icon">${METER_TREE_ICON_DCU}</span>
+          <span class="tree-node-label">${dcuKey}</span>
+          <span class="legend-dot ${onlineMeters > 0 ? 'legend-online' : 'legend-offline'}"></span>
+          <span class="tree-node-sub">${onlineMeters}/${totalMeters} онлайн</span>
+          <span class="tag-pill tag-c5">${totalMeters}</span>
+        </div>
+        <ul class="tree-children" data-tree-children="${dcuNodeKey}" ${isOpen ? '' : 'hidden'}>
+          ${METER_TREE_PHASE_ORDER.filter((k) => phases[k]).map((k) => meterTreePhaseGroupHtml(subKey, dcuKey, k, phases[k])).join('')}
+        </ul>
+      </li>`;
+    }
+
+    function meterTreeSubstationNodeHtml(subKey, dcus) {
+      const dcuKeys = Object.keys(dcus).sort();
+      const totalMeters = dcuKeys.reduce(
+        (sum, k) => sum + Object.values(dcus[k]).reduce((s, g) => s + g.meters.length, 0),
+        0
+      );
+      const subNodeKey = `sub:${subKey}`;
+      const isOpen = meterTreeExpandedKeys.has(subNodeKey);
+
+      return `<li class="tree-node tree-node-substation">
+        <div class="tree-node-header tree-toggle ${isOpen ? 'tree-toggle-open' : ''}" data-tree-toggle="${subNodeKey}">
+          <span class="tree-chevron">▶</span>
+          <span class="tree-node-icon">${METER_TREE_ICON_SUBSTATION}</span>
+          <span class="tree-node-label">${subKey}</span>
+          <span class="tag-pill tag-c1">${totalMeters}</span>
+        </div>
+        <ul class="tree-children" data-tree-children="${subNodeKey}" ${isOpen ? '' : 'hidden'}>
+          ${dcuKeys.map((k) => meterTreeDcuNodeHtml(subKey, k, dcus[k])).join('')}
+        </ul>
+      </li>`;
+    }
+
+    function renderMeterTreeContent() {
+      const container = document.getElementById('meterTreeContainer');
+
+      if (meterListFiltered.length === 0) {
+        container.innerHTML = '<p class="table-empty">Шүүлтэд тохирох тоолуур олдсонгүй.</p>';
+        return;
+      }
+
+      const phaseMap = getBrandPhaseMap();
+      const tree = buildMeterTree(meterListFiltered, phaseMap);
+      const subKeys = Object.keys(tree).sort();
+
+      if (!meterTreeDefaultExpanded && subKeys.length > 0) {
+        meterTreeDefaultExpanded = true;
+        meterTreeExpandedKeys.add(`sub:${subKeys[0]}`);
+        const firstDcuKeys = Object.keys(tree[subKeys[0]]).sort();
+        if (firstDcuKeys.length > 0) {
+          meterTreeExpandedKeys.add(`dcu:${subKeys[0]}|||${firstDcuKeys[0]}`);
+        }
+      }
+
+      container.innerHTML = `<ul class="tree-root">${subKeys.map((k) => meterTreeSubstationNodeHtml(k, tree[k])).join('')}</ul>`;
+    }
+
+    function renderMeterTreeDetailPanel(selection) {
+      const emptyEl = document.getElementById('meterTreeDetailEmpty');
+      const contentEl = document.getElementById('meterTreeDetailContent');
+
+      if (!selection) {
+        emptyEl.hidden = false;
+        contentEl.hidden = true;
+        meterTreeSelectedMeters = [];
+        return;
+      }
+
+      emptyEl.hidden = true;
+      contentEl.hidden = false;
+
+      const { dcuKey, phaseKey, label, meters } = selection;
+      meterTreeSelectedMeters = meters;
+
+      const total = meters.length;
+      const online = meters.filter((m) => m.status === 'connected').length;
+      const offline = total - online;
+
+      document.getElementById('meterTreeDetailTitle').textContent = `${dcuKey} · ${label}`;
+      document.getElementById('meterTreeDetailCountTag').textContent = `${total} тоолуур`;
+
+      const ctx = document.getElementById('meterTreeDetailChart').getContext('2d');
+      if (meterTreeDetailChart) meterTreeDetailChart.destroy();
+      meterTreeDetailChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Онлайн', 'Офлайн'],
+          datasets: [{ data: [online, offline], backgroundColor: ['#10b981', '#ef4444'], borderWidth: 0 }],
+        },
+        options: { cutout: '72%', plugins: { legend: { display: false } } },
+      });
+      document.getElementById('meterTreeDetailOnlineCount').textContent = online;
+
+      document.getElementById('meterTreeDetailLegend').innerHTML = `
+        <li><span class="legend-dot legend-online"></span>Онлайн <strong>${online}</strong></li>
+        <li><span class="legend-dot legend-offline"></span>Офлайн <strong>${offline}</strong></li>
+      `;
+
+      const totalPower = meters.reduce((sum, m) => sum + syntheticMeterPowerKw(m.meterId, phaseKey), 0);
+      const totalUsage = totalPower * (6 + (hashSeed(dcuKey + phaseKey) % 6));
+      const successRate = total > 0 ? Math.round((online / total) * 1000) / 10 : 0;
+
+      document.getElementById('meterTreeDetailPower').textContent = `${totalPower.toFixed(1)} kW`;
+      document.getElementById('meterTreeDetailUsage').textContent = `${totalUsage.toFixed(1)} kWh`;
+      document.getElementById('meterTreeDetailSuccess').textContent = `${successRate}%`;
+
+      const onlineWithTime = meters.find((m) => m.status === 'connected' && /^\d{2}:\d{2}$/.test(m.lastReadingAt));
+      document.getElementById('meterTreeDetailLastPoll').textContent = onlineWithTime
+        ? `${onlineWithTime.lastReadingAt} цагт`
+        : '—';
+
+      const brandCounts = {};
+      meters.forEach((m) => {
+        brandCounts[m.type] = (brandCounts[m.type] || 0) + 1;
+      });
+      const brandEntries = Object.entries(brandCounts).sort((a, b) => b[1] - a[1]);
+      const maxCount = brandEntries.length > 0 ? brandEntries[0][1] : 1;
+      const topBrands = brandEntries.slice(0, 4);
+      const otherCount = brandEntries.slice(4).reduce((sum, [, c]) => sum + c, 0);
+      const brandRows = otherCount > 0 ? [...topBrands, ['Бусад', otherCount]] : topBrands;
+
+      document.getElementById('meterTreeDetailBrands').innerHTML = brandRows
+        .map(
+          ([brand, count]) => `<li class="rank-bar-row">
+            <span class="rank-bar-label">${brand}</span>
+            <span class="rank-bar-track"><span class="rank-bar-fill" style="width:${Math.round((count / maxCount) * 100)}%"></span></span>
+            <span class="rank-bar-count">${count}</span>
+          </li>`
+        )
+        .join('');
+
+      const problemMeters = meters.filter(
+        (m) => m.status !== 'connected' || (m.alarm && m.alarm !== '-' && m.alarm !== '—')
+      );
+      document.getElementById('meterTreeDetailAlerts').innerHTML =
+        problemMeters.length === 0
+          ? '<li class="tree-detail-no-alerts">Анхаарах зүйл алга.</li>'
+          : problemMeters
+              .slice(0, 6)
+              .map((m) => {
+                const reason = m.status !== 'connected' ? 'Холбоо тасарсан' : m.alarm;
+                return `<li>
+                  <span class="alert-icon icon-red"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></span>
+                  <span class="alert-body">
+                    <div class="alert-title">${m.meterId}</div>
+                    <div class="alert-sub">${reason}</div>
+                  </span>
+                </li>`;
+              })
+              .join('');
+    }
+
+    function meterTreeFindGroup(groupKey) {
+      const [subKey, dcuKey, phaseKey] = groupKey.split('|||');
+      const phaseMap = getBrandPhaseMap();
+      const tree = buildMeterTree(meterListFiltered, phaseMap);
+      const group = tree[subKey]?.[dcuKey]?.[phaseKey];
+      return group ? { subKey, dcuKey, phaseKey, label: group.label, meters: group.meters } : null;
+    }
+
+    async function renderMeterTree() {
+      if (meterModelRecords.length === 0) {
+        await loadMeterModels();
+      }
+      renderMeterTreeContent();
+
+      const selection = meterTreeSelectedKey ? meterTreeFindGroup(meterTreeSelectedKey) : null;
+      if (meterTreeSelectedKey && !selection) meterTreeSelectedKey = null;
+      renderMeterTreeDetailPanel(selection);
+    }
+
+    function setMeterViewMode(mode) {
+      meterViewMode = mode;
+      document.getElementById('meterViewModeTableButton').classList.toggle('active', mode === 'table');
+      document.getElementById('meterViewModeTreeButton').classList.toggle('active', mode === 'tree');
+      document.getElementById('meterTablePanel').hidden = mode !== 'table';
+      document.getElementById('meterTreeLayout').hidden = mode !== 'tree';
+      if (mode === 'tree') renderMeterTree();
+    }
+
+    function setupMeterListView() {
+      if (meterListInitialized) return;
+      meterListInitialized = true;
+
+      ['filterStatus', 'filterLocation', 'filterType'].forEach((id) => {
+        document.getElementById(id).addEventListener('change', applyMeterFilters);
+      });
+      document.getElementById('filterSearch').addEventListener('input', applyMeterFilters);
+
+      document.getElementById('resetFiltersButton').addEventListener('click', () => {
+        document.getElementById('filterStatus').value = '';
+        document.getElementById('filterLocation').value = '';
+        document.getElementById('filterType').value = '';
+        document.getElementById('filterSearch').value = '';
+        applyMeterFilters();
+      });
+
+      document.getElementById('exportButton').addEventListener('click', exportMeterListCsv);
+
+      document.getElementById('pageSizeSelect').addEventListener('change', (e) => {
+        meterListPageSize = Number(e.target.value);
+        meterListPage = 1;
+        renderMeterListTable();
+      });
+
+      document.getElementById('prevPageButton').addEventListener('click', () => {
+        meterListPage -= 1;
+        renderMeterListTable();
+      });
+
+      document.getElementById('nextPageButton').addEventListener('click', () => {
+        meterListPage += 1;
+        renderMeterListTable();
+      });
+
+      document.getElementById('meterViewModeTableButton').addEventListener('click', () => setMeterViewMode('table'));
+      document.getElementById('meterViewModeTreeButton').addEventListener('click', () => setMeterViewMode('tree'));
+
+      document.getElementById('meterTreeExpandAllButton').addEventListener('click', (e) => {
+        meterTreeAllExpanded = !meterTreeAllExpanded;
+        if (meterTreeAllExpanded) {
+          document.querySelectorAll('#meterTreeContainer [data-tree-toggle]').forEach((h) => {
+            meterTreeExpandedKeys.add(h.dataset.treeToggle);
+          });
+          e.currentTarget.textContent = 'Бүгдийг хумих';
+        } else {
+          meterTreeExpandedKeys.clear();
+          e.currentTarget.textContent = 'Бүгдийг дэлгэх';
+        }
+        renderMeterTreeContent();
+      });
+
+      document.getElementById('meterTreeContainer').addEventListener('click', (e) => {
+        const toggle = e.target.closest('[data-tree-toggle]');
+        if (toggle) {
+          const key = toggle.dataset.treeToggle;
+          if (meterTreeExpandedKeys.has(key)) {
+            meterTreeExpandedKeys.delete(key);
+          } else {
+            meterTreeExpandedKeys.add(key);
+          }
+          renderMeterTreeContent();
+          return;
+        }
+
+        const moreLink = e.target.closest('[data-tree-more]');
+        if (moreLink) {
+          const group = moreLink.closest('.tree-phase-group');
+          const extra = group.querySelector('.tree-meter-list-extra');
+          const wasHidden = extra.hidden;
+          extra.hidden = !wasHidden;
+          moreLink.textContent = wasHidden ? 'Хумих' : `Бусад ${extra.children.length} тоолуур харах`;
+          return;
+        }
+
+        const phaseSelect = e.target.closest('[data-tree-phase-select]');
+        if (phaseSelect) {
+          meterTreeSelectedKey = phaseSelect.dataset.treePhaseSelect;
+          renderMeterTreeContent();
+          renderMeterTreeDetailPanel(meterTreeFindGroup(meterTreeSelectedKey));
+        }
+      });
+
+      document.getElementById('meterTreeViewAllButton').addEventListener('click', () => {
+        if (meterTreeSelectedMeters.length === 0) return;
+        meterListFiltered = meterTreeSelectedMeters;
+        meterListPage = 1;
+        setMeterViewMode('table');
+        renderMeterListTable();
+      });
+    }
+
+    // ---- Meter model view (Asset Management > Meter model) ----
+    // Detailed meter model/type catalog, backed by the `meter_types` table.
+    function getFilteredMeterModelRecords() {
+      const activeFilters = Object.entries(meterModelFilters).filter(([, value]) => value.trim() !== '');
+      if (activeFilters.length === 0) return meterModelRecords;
+
+      return meterModelRecords.filter((m) =>
+        activeFilters.every(([col, value]) => {
+          const cellValue = m[col] ?? '';
+          return String(cellValue).toLowerCase().includes(value.trim().toLowerCase());
+        })
+      );
+    }
+
+    function renderMeterModelTable() {
+      const tbody = document.getElementById('meterModelBody');
+      const filtered = getFilteredMeterModelRecords();
+
+      if (filtered.length === 0) {
+        const message = meterModelRecords.length === 0
+          ? 'Загвар бүртгэгдээгүй байна.'
+          : 'Хайлтад тохирох загвар олдсонгүй.';
+        tbody.innerHTML = `<tr><td colspan="10" class="table-empty">${message}</td></tr>`;
+      } else {
+        tbody.innerHTML = filtered
+          .map(
+            (m) => `<tr>
+              <td>${escapeHtml(m.brand) || '—'}</td>
+              <td>${escapeHtml(m.model) || '—'}</td>
+              <td>${escapeHtml(m.manufacturer) || '—'}</td>
+              <td>${escapeHtml(m.type) || '—'}</td>
+              <td>${m.quantity ?? '—'}</td>
+              <td>${escapeHtml(m.phase) || '—'}</td>
+              <td>${escapeHtml(m.meterType) || '—'}</td>
+              <td>${escapeHtml(m.standard) || '—'}</td>
+              <td>${escapeHtml(m.dataTransmission) || '—'}</td>
+              <td class="table-actions">
+                <button type="button" class="icon-button" data-edit-model="${m.id}" title="Засах">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                </button>
+                <button type="button" class="icon-button icon-button-danger" data-delete-model="${m.id}" title="Устгах">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                </button>
+              </td>
+            </tr>`
+          )
+          .join('');
+      }
+
+      document.getElementById('meterModelSummary').textContent =
+        filtered.length === meterModelRecords.length
+          ? `Нийт ${meterModelRecords.length} загвар`
+          : `${filtered.length} / ${meterModelRecords.length} загвар`;
+    }
+
+    async function loadMeterModels() {
+      try {
+        const response = await fetch('/api/meter-types', { credentials: 'include' });
+        if (!response.ok) throw new Error('Meter type fetch failed');
+        const data = await response.json();
+        meterModelRecords = data.meterTypes || [];
+        renderMeterModelTable();
+      } catch (error) {
+        console.error('Meter model load failed:', error);
+        document.getElementById('meterModelBody').innerHTML =
+          '<tr><td colspan="10" class="table-empty">Загварын мэдээлэл ачаалахад алдаа гарлаа.</td></tr>';
+      }
+    }
+
+    function openMeterModelModal(record) {
+      meterModelEditingId = record ? record.id : null;
+
+      document.getElementById('meterModelModalTitle').textContent = record
+        ? 'Тоолуурын загвар засах'
+        : 'Тоолуурын загвар нэмэх';
+      document.getElementById('meterModelFormError').hidden = true;
+      document.getElementById('meterModelDatasheetStatus').hidden = true;
+
+      document.getElementById('meterModelBrand').value = record?.brand || '';
+      document.getElementById('meterModelModel').value = record?.model || '';
+      document.getElementById('meterModelManufacturer').value = record?.manufacturer || '';
+      document.getElementById('meterModelType').value = record?.type || '';
+      document.getElementById('meterModelQuantity').value = record?.quantity ?? '';
+      document.getElementById('meterModelPhase').value = record?.phase || '';
+      document.getElementById('meterModelMeterType').value = record?.meterType || '';
+      document.getElementById('meterModelStandard').value = record?.standard || '';
+      document.getElementById('meterModelDataTransmission').value = record?.dataTransmission || '';
+
+      document.getElementById('meterModelModalOverlay').hidden = false;
+      document.getElementById('meterModelBrand').focus();
+    }
+
+    function closeMeterModelModal() {
+      document.getElementById('meterModelModalOverlay').hidden = true;
+      meterModelEditingId = null;
+    }
+
+    async function submitMeterModelForm(e) {
+      e.preventDefault();
+
+      const brand = document.getElementById('meterModelBrand').value.trim();
+      if (!brand) return;
+
+      const payload = {
+        brand,
+        model: document.getElementById('meterModelModel').value.trim(),
+        manufacturer: document.getElementById('meterModelManufacturer').value.trim(),
+        type: document.getElementById('meterModelType').value.trim(),
+        quantity: document.getElementById('meterModelQuantity').value === '' ? null : Number(document.getElementById('meterModelQuantity').value),
+        phase: document.getElementById('meterModelPhase').value.trim(),
+        meterType: document.getElementById('meterModelMeterType').value.trim(),
+        standard: document.getElementById('meterModelStandard').value.trim(),
+        dataTransmission: document.getElementById('meterModelDataTransmission').value.trim(),
+      };
+
+      const isEdit = meterModelEditingId !== null;
+      const url = isEdit ? `/api/meter-types/${meterModelEditingId}` : '/api/meter-types';
+      const method = isEdit ? 'PUT' : 'POST';
+
+      const errorEl = document.getElementById('meterModelFormError');
+      const saveButton = document.getElementById('meterModelSaveButton');
+      saveButton.disabled = true;
+
+      try {
+        const response = await fetch(url, {
+          method,
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || 'Хадгалах үед алдаа гарлаа.');
+        }
+
+        closeMeterModelModal();
+        await loadMeterModels();
+      } catch (error) {
+        errorEl.textContent = error.message;
+        errorEl.hidden = false;
+      } finally {
+        saveButton.disabled = false;
+      }
+    }
+
+    function readFileAsBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result).split(',').pop());
+        reader.onerror = () => reject(new Error('Файл уншихад алдаа гарлаа.'));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function applyDatasheetFields(fields) {
+      const fieldMap = {
+        brand: 'meterModelBrand',
+        model: 'meterModelModel',
+        manufacturer: 'meterModelManufacturer',
+        type: 'meterModelType',
+        phase: 'meterModelPhase',
+        meterType: 'meterModelMeterType',
+        standard: 'meterModelStandard',
+        dataTransmission: 'meterModelDataTransmission',
+      };
+
+      let filledCount = 0;
+      Object.entries(fieldMap).forEach(([key, elementId]) => {
+        const value = fields[key];
+        if (value !== null && value !== undefined && String(value).trim() !== '') {
+          document.getElementById(elementId).value = String(value).trim();
+          filledCount += 1;
+        }
+      });
+      return filledCount;
+    }
+
+    async function handleDatasheetFileSelected(e) {
+      const file = e.target.files && e.target.files[0];
+      e.target.value = '';
+      if (!file) return;
+
+      const button = document.getElementById('meterModelLoadDatasheetButton');
+      const statusEl = document.getElementById('meterModelDatasheetStatus');
+
+      button.disabled = true;
+      statusEl.hidden = false;
+      statusEl.className = 'datasheet-load-status';
+      statusEl.textContent = `"${file.name}" файлыг AI-аар уншиж байна...`;
+
+      try {
+        const fileData = await readFileAsBase64(file);
+        const response = await fetch('/api/meter-types/extract-datasheet', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fileName: file.name, fileData }),
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || 'Датшийт уншихад алдаа гарлаа.');
+        }
+
+        const filledCount = applyDatasheetFields(data.fields || {});
+        statusEl.className = 'datasheet-load-status datasheet-load-success';
+        statusEl.textContent = filledCount > 0
+          ? `${filledCount} талбарыг датшийтээс автоматаар бөглөлөө.`
+          : 'Датшийтээс шаардлагатай мэдээлэл олдсонгүй.';
+      } catch (error) {
+        statusEl.className = 'datasheet-load-status datasheet-load-error';
+        statusEl.textContent = error.message;
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    // AI-photo extraction now happens in the /pictures-folder tab (opened by
+    // the "Бодит зураг ачаалах" button); the result comes back here via
+    // postMessage — see the 'message' listener in setupMeterModelView.
+
+    async function deleteMeterModel(id) {
+      if (!window.confirm('Энэ тоолуурын загварыг устгах уу?')) return;
+
+      try {
+        const response = await fetch(`/api/meter-types/${id}`, { method: 'DELETE', credentials: 'include' });
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || 'Устгах үед алдаа гарлаа.');
+        }
+        await loadMeterModels();
+      } catch (error) {
+        window.alert(error.message);
+      }
+    }
+
+    async function readNdjsonStream(response, onEvent) {
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        let newlineIndex;
+        while ((newlineIndex = buffer.indexOf('\n')) >= 0) {
+          const line = buffer.slice(0, newlineIndex).trim();
+          buffer = buffer.slice(newlineIndex + 1);
+          if (line) onEvent(JSON.parse(line));
+        }
+      }
+      const rest = buffer.trim();
+      if (rest) onEvent(JSON.parse(rest));
+    }
+
+    async function refreshMeterModelsFromDatasheets() {
+      const button = document.getElementById('refreshMeterModelButton');
+      const statusEl = document.getElementById('meterModelRefreshStatus');
+      const progressWrap = document.getElementById('meterModelRefreshProgress');
+      const progressFill = document.getElementById('meterModelRefreshProgressFill');
+
+      button.disabled = true;
+      statusEl.hidden = false;
+      statusEl.className = 'meter-model-refresh-status';
+      statusEl.textContent = 'MeterSpec/datasheet болон pictures фолдер дэх файлуудыг AI-аар уншиж байна...';
+      progressWrap.hidden = false;
+      progressFill.style.width = '0%';
+
+      let finalEvent = null;
+
+      try {
+        const response = await fetch('/api/meter-types/refresh-from-datasheets', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ engine: meterModelRefreshEngine }),
+        });
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData.message || 'Шинэчлэх үед алдаа гарлаа.');
+        }
+
+        await readNdjsonStream(response, (event) => {
+          if (event.type === 'progress') {
+            const pct = event.total > 0 ? Math.round((event.current / event.total) * 100) : 0;
+            progressFill.style.width = `${pct}%`;
+            statusEl.textContent = `${event.current} / ${event.total} файл боловсруулж байна... (${event.file})`;
+          } else if (event.type === 'error') {
+            throw new Error(event.message || 'Шинэчлэх үед алдаа гарлаа.');
+          } else {
+            // 'done' event, or the plain single-shot response used when there's
+            // nothing to process (no files found).
+            finalEvent = event;
+          }
+        });
+
+        if (!finalEvent || !finalEvent.success) {
+          throw new Error((finalEvent && finalEvent.message) || 'Шинэчлэх үед алдаа гарлаа.');
+        }
+
+        if (finalEvent.processed === 0) {
+          statusEl.textContent = finalEvent.message || 'Файл олдсонгүй.';
+          return;
+        }
+
+        const matched = finalEvent.results.filter((r) => r.matched);
+        const fromDatasheet = matched.filter((r) => r.source === 'datasheet').map((r) => r.brand).filter(Boolean);
+        const fromPhoto = matched.filter((r) => r.source === 'photo').map((r) => r.brand).filter(Boolean);
+
+        let summary = `${finalEvent.processed} файл боловсруулж, ${matched.length} загварын мэдээллийг шинэчиллээ.`;
+        if (fromDatasheet.length > 0) {
+          summary += ` Файлаас шинэчлэгдсэн: ${fromDatasheet.join(', ')}.`;
+        }
+        if (fromPhoto.length > 0) {
+          summary += ` Бодит зургаар шинэчлэгдсэн: ${fromPhoto.join(', ')}.`;
+        }
+
+        statusEl.className = 'meter-model-refresh-status meter-model-refresh-success';
+        statusEl.textContent = summary;
+        progressFill.style.width = '100%';
+
+        await loadMeterModels();
+      } catch (error) {
+        statusEl.className = 'meter-model-refresh-status meter-model-refresh-error';
+        statusEl.textContent = error.message;
+      } finally {
+        setTimeout(() => {
+          progressWrap.hidden = true;
+        }, 1200);
+        button.disabled = false;
+      }
+    }
+
+    function setupMeterModelView() {
+      if (meterModelInitialized) return;
+      meterModelInitialized = true;
+
+      document.getElementById('refreshMeterModelButton').addEventListener('click', refreshMeterModelsFromDatasheets);
+      const refreshEngineToggle = document.getElementById('meterModelRefreshEngineToggle');
+      refreshEngineToggle.querySelectorAll('button').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.engine === meterModelRefreshEngine);
+      });
+      refreshEngineToggle.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-engine]');
+        if (!btn) return;
+        meterModelRefreshEngine = btn.dataset.engine;
+        localStorage.setItem('meterModelAiEngine', meterModelRefreshEngine);
+        refreshEngineToggle.querySelectorAll('button').forEach((b) => b.classList.toggle('active', b === btn));
+      });
+      document.getElementById('addMeterModelButton').addEventListener('click', () => openMeterModelModal(null));
+      document.getElementById('meterModelModalClose').addEventListener('click', closeMeterModelModal);
+      document.getElementById('meterModelCancelButton').addEventListener('click', closeMeterModelModal);
+      document.getElementById('meterModelModalOverlay').addEventListener('click', (e) => {
+        if (e.target.id === 'meterModelModalOverlay') closeMeterModelModal();
+      });
+      document.getElementById('meterModelForm').addEventListener('submit', submitMeterModelForm);
+      document.getElementById('meterModelLoadDatasheetButton').addEventListener('click', () => {
+        document.getElementById('meterModelDatasheetInput').click();
+      });
+      document.getElementById('meterModelDatasheetInput').addEventListener('change', handleDatasheetFileSelected);
+      document.getElementById('meterModelLoadPhotoButton').addEventListener('click', () => {
+        window.open('/pictures-folder', '_blank');
+      });
+      window.addEventListener('message', (e) => {
+        if (e.origin !== window.location.origin) return;
+        if (!e.data || e.data.type !== 'ai-meter-photo-extracted') return;
+
+        const statusEl = document.getElementById('meterModelDatasheetStatus');
+        const filledCount = applyDatasheetFields(e.data.fields || {});
+        statusEl.hidden = false;
+        statusEl.className = 'datasheet-load-status datasheet-load-success';
+        const engineNote = e.data.engine === 'offline' ? ' (Offline)' : '';
+        statusEl.textContent = filledCount > 0
+          ? `${filledCount} талбарыг зургаас автоматаар бөглөлөө${engineNote}.`
+          : `Зургаас шаардлагатай мэдээлэл олдсонгүй${engineNote}.`;
+      });
+
+      document.getElementById('meterModelFilterRow').addEventListener('input', (e) => {
+        const col = e.target.dataset.filterCol;
+        if (!col) return;
+        meterModelFilters[col] = e.target.value;
+        renderMeterModelTable();
+      });
+
+      document.getElementById('meterModelBody').addEventListener('click', (e) => {
+        const editButton = e.target.closest('[data-edit-model]');
+        if (editButton) {
+          const record = meterModelRecords.find((m) => String(m.id) === editButton.dataset.editModel);
+          if (record) openMeterModelModal(record);
+          return;
+        }
+
+        const deleteButton = e.target.closest('[data-delete-model]');
+        if (deleteButton) {
+          deleteMeterModel(deleteButton.dataset.deleteModel);
+        }
+      });
+    }
+
+    // ---- Meter connection point view ("Тоолуур холбох цэг") ----
+    // Renders the real network hierarchy (see migrateToNormalizedSchema /
+    // scripts/import-network-tree.js) as a box/connector-line org chart,
+    // already pruned server-side to only the branches that have meters
+    // attached. Pure-CSS org chart technique (see .org-tree* in
+    // styles.css): the markup is just nested <ul>/<li>, no layout math.
+    function orgNodeHtml(node) {
+      const isLeafWithMeters = node.children.length === 0 && node.directMeters > 0;
+      const colorClass = isLeafWithMeters ? 'org-node-green' : 'org-node-blue';
+      const clickAttr = isLeafWithMeters ? `data-network-node="${node.id}"` : '';
+
+      const meta = node.metadata || {};
+      const subParts = [meta.capacity, meta.transformer, meta.cable].filter(Boolean);
+      let subtitle = subParts.join(' · ');
+      if (isLeafWithMeters) {
+        subtitle = subtitle ? `${subtitle} · ${node.directMeters} тоолуур` : `${node.directMeters} тоолуур`;
+      } else if (!subtitle) {
+        subtitle = `${node.totalMeters} тоолуур холбогдсон`;
+      }
+
+      const childrenHtml =
+        node.children.length > 0
+          ? `<ul>${node.children.map((c) => `<li>${orgNodeHtml(c)}</li>`).join('')}</ul>`
+          : '';
+
+      return `<div class="org-node ${colorClass}" ${clickAttr}>
+        <span class="org-node-title">${node.name}</span>
+        <span class="org-node-sub">${subtitle}</span>
+      </div>${childrenHtml}`;
+    }
+
+    function renderOrgTree() {
+      const container = document.getElementById('orgTreeContainer');
+      if (networkTreeData.length === 0) {
+        container.innerHTML = '<p class="table-empty">Холбогдсон тоолуур бүхий сүлжээний зангилаа олдсонгүй.</p>';
+        return;
+      }
+      container.innerHTML = networkTreeData
+        .map((root) => `<ul class="org-tree"><li>${orgNodeHtml(root)}</li></ul>`)
+        .join('');
+    }
+
+    async function loadNetworkTree() {
+      const container = document.getElementById('orgTreeContainer');
+      container.innerHTML = '<p class="table-empty">Ачааллаж байна...</p>';
+      try {
+        const response = await fetch('/api/network-tree', { credentials: 'include' });
+        const data = await response.json();
+        if (!response.ok || !data.success) throw new Error(data.message || 'Ачаалахад алдаа гарлаа.');
+        networkTreeData = data.tree;
+        renderOrgTree();
+      } catch (error) {
+        container.innerHTML = `<p class="table-empty">${error.message}</p>`;
+      }
+    }
+
+    function setSurveyCard(valueId, barId, count, total) {
+      const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+      document.getElementById(valueId).innerHTML =
+        `${count.toLocaleString('mn-MN')} <span class="survey-stat-unit">ш · ${pct}%</span>`;
+      document.getElementById(barId).style.width = `${pct}%`;
+    }
+
+    async function loadSurveyResults() {
+      const grid = document.getElementById('surveyStatGrid');
+      try {
+        const response = await fetch('/api/meter-survey', { credentials: 'include' });
+        const data = await response.json();
+        if (!response.ok || !data.success) throw new Error(data.message || 'Ачаалахад алдаа гарлаа.');
+
+        document.getElementById('surveyHintTotal').textContent = data.total.toLocaleString('mn-MN');
+
+        document.getElementById('surveyTotal').innerHTML = `${data.total.toLocaleString('mn-MN')} <span class="survey-stat-unit">ш</span>`;
+        setSurveyCard('surveyRemoteReady', 'surveyRemoteReadyBar', data.remoteReady, data.total);
+        setSurveyCard('surveyRemoteControl', 'surveyRemoteControlBar', data.remoteControllable, data.total);
+        setSurveyCard('surveyHesCapable', 'surveyHesCapableBar', data.hesCapable, data.total);
+        setSurveyCard('surveyHesConnected', 'surveyHesConnectedBar', data.hesConnected, data.total);
+        setSurveyCard('surveyNeedsEquipment', 'surveyNeedsEquipmentBar', data.needsEquipment, data.total);
+
+        document.getElementById('summaryTotal').textContent = data.total.toLocaleString('mn-MN');
+        document.getElementById('summaryRemoteReady').textContent = data.remoteReady.toLocaleString('mn-MN');
+        document.getElementById('summaryHesCapable').textContent = data.hesCapable.toLocaleString('mn-MN');
+        document.getElementById('summaryHesConnected').textContent = data.hesConnected.toLocaleString('mn-MN');
+      } catch (error) {
+        grid.innerHTML = `<p class="table-empty">${escapeHtml(error.message)}</p>`;
+      }
+    }
+
+    async function toggleNetworkNodeMeters(nodeEl) {
+      const existingPopup = nodeEl.querySelector('.org-node-meters');
+      if (existingPopup) {
+        existingPopup.remove();
+        networkTreeOpenMeterAssetId = null;
+        return;
+      }
+
+      document.querySelectorAll('.org-node-meters').forEach((el) => el.remove());
+      const assetId = nodeEl.dataset.networkNode;
+      networkTreeOpenMeterAssetId = assetId;
+
+      const popup = document.createElement('div');
+      popup.className = 'org-node-meters';
+      popup.innerHTML = '<p class="table-empty">Ачааллаж байна...</p>';
+      nodeEl.appendChild(popup);
+
+      try {
+        const response = await fetch(`/api/network-tree/${assetId}/meters`, { credentials: 'include' });
+        const data = await response.json();
+        if (!response.ok || !data.success) throw new Error(data.message || 'Ачаалахад алдаа гарлаа.');
+
+        const rows = data.meters
+          .map((m) => {
+            const isOnline = m.status === 'connected';
+            return `<div class="org-node-meter-row">
+              <span class="legend-dot ${isOnline ? 'legend-online' : 'legend-offline'}"></span>
+              <span>${escapeHtml(m.meterId)}</span>
+              <span class="org-node-meter-brand">${escapeHtml(m.brand)}</span>
+            </div>`;
+          })
+          .join('');
+        popup.innerHTML = `<button type="button" class="org-node-meters-close" data-close-meters>✕</button>${rows}`;
+      } catch (error) {
+        popup.innerHTML = `<button type="button" class="org-node-meters-close" data-close-meters>✕</button><p class="table-empty">${error.message}</p>`;
+      }
+    }
+
+    function setupMeterConnectionView() {
+      if (networkTreeInitialized) return;
+      networkTreeInitialized = true;
+
+      document.getElementById('connRefreshButton').addEventListener('click', loadNetworkTree);
+
+      document.getElementById('orgTreeContainer').addEventListener('click', (e) => {
+        const closeBtn = e.target.closest('[data-close-meters]');
+        if (closeBtn) {
+          closeBtn.closest('.org-node-meters').remove();
+          networkTreeOpenMeterAssetId = null;
+          return;
+        }
+        const node = e.target.closest('[data-network-node]');
+        if (node) toggleNetworkNodeMeters(node);
+      });
+    }
+
+
+    // ---- AI Tool view ----
+    // Serial number, DCU, substation etc. already come from the meters table
+    // (see meter list view above). The fields below — organization name,
+    // last reading value/date, period usage, and the AI assessment label —
+    // have no backing data source yet, so they are derived deterministically
+    // from each meter's own ID/status (stable across re-renders, but example
+    // data, not real telemetry).
+    function hashSeed(str) {
+      let h = 0;
+      const s = String(str);
+      for (let i = 0; i < s.length; i += 1) {
+        h = (h * 31 + s.charCodeAt(i)) >>> 0;
+      }
+      return h;
+    }
+
+    function pad2(n) {
+      return String(n).padStart(2, '0');
+    }
+
+    function formatDateTime(date) {
+      return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())} ${pad2(date.getHours())}:${pad2(date.getMinutes())}`;
+    }
+
+    const AI_ORG_NAMES = ['Цэций СӨХ', 'Оффис төв', 'Дэлгүүр', 'Цэцэрлэг', 'Эмнэлэг', 'Зочид буудал', 'Худалдааны төв', 'Сургууль'];
+    const AI_TAG_CLASSES = ['tag-c1', 'tag-c2', 'tag-c3', 'tag-c4', 'tag-c5', 'tag-c6'];
+
+    function buildAiToolRecords(meters) {
+      return meters.map((meter, i) => {
+        const seed = hashSeed(meter.meterId || String(i));
+        const isOnline = meter.status === 'connected';
+
+        let statusLabel;
+        let aiAssessment;
+        if (!isOnline) {
+          statusLabel = 'Идэвгүй';
+          aiAssessment = 'Уншилт ирээгүй';
+        } else if (seed % 100 < 5) {
+          statusLabel = 'Сэрэмжлүүлэгтэй';
+          aiAssessment = 'Хэвийн бус хэлбэлзэл';
+        } else if (seed % 100 < 25) {
+          statusLabel = 'Идэвхтэй';
+          aiAssessment = 'Хэрэглээ ихэссэн';
+        } else {
+          statusLabel = 'Идэвхтэй';
+          aiAssessment = 'Хэвийн';
+        }
+
+        const lastReading = 200 + (seed % 4800) + ((seed % 100) / 100);
+        const periodUsage = lastReading * (0.1 + ((seed >>> 3) % 15) / 100);
+
+        const daysAgo = isOnline ? seed % 2 : 3 + (seed % 28);
+        const readingDate = new Date();
+        readingDate.setDate(readingDate.getDate() - daysAgo);
+        readingDate.setHours(6 + (seed % 16), (seed * 7) % 60, 0, 0);
+
+        const org = AI_ORG_NAMES[seed % AI_ORG_NAMES.length];
+
+        return {
+          meterId: meter.meterId,
+          company: meter.building ? `${org} - ${meter.building}` : org,
+          meterType: meter.brand || 'Тодорхойгүй',
+          location: meter.facility || meter.address || '—',
+          lastReadingText: lastReading.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+          readingDate,
+          readingDateText: formatDateTime(readingDate),
+          periodUsageText: periodUsage.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+          statusLabel,
+          aiAssessment,
+        };
+      });
+    }
+
+    function tagColorClass(value) {
+      return AI_TAG_CLASSES[hashSeed(value) % AI_TAG_CLASSES.length];
+    }
+
+    function populateAiFilters(records) {
+      const companySelect = document.getElementById('aiFilterCompany');
+      const typeSelect = document.getElementById('aiFilterType');
+      const locationSelect = document.getElementById('aiFilterLocation');
+
+      const companies = [...new Set(records.map((r) => r.company))].sort();
+      const types = [...new Set(records.map((r) => r.meterType))].sort();
+      const locations = [...new Set(records.map((r) => r.location))].sort();
+
+      companySelect.innerHTML = '<option value="">Бүгд</option>' + companies.map((c) => `<option value="${c}">${c}</option>`).join('');
+      typeSelect.innerHTML = '<option value="">Бүгд</option>' + types.map((t) => `<option value="${t}">${t}</option>`).join('');
+      locationSelect.innerHTML = '<option value="">Бүгд</option>' + locations.map((l) => `<option value="${l}">${l}</option>`).join('');
+    }
+
+    function renderAiStats(records) {
+      const total = records.length;
+      const active = records.filter((r) => r.statusLabel === 'Идэвхтэй').length;
+      const warning = records.filter((r) => r.statusLabel === 'Сэрэмжлүүлэгтэй').length;
+      const inactive = records.filter((r) => r.statusLabel === 'Идэвгүй').length;
+
+      document.getElementById('aiStatTotal').textContent = total.toLocaleString('en-US');
+      document.getElementById('aiStatActive').textContent = active.toLocaleString('en-US');
+      document.getElementById('aiStatWarning').textContent = warning.toLocaleString('en-US');
+      document.getElementById('aiStatInactive').textContent = inactive.toLocaleString('en-US');
+    }
+
+    function applyAiFilters() {
+      const company = document.getElementById('aiFilterCompany').value;
+      const type = document.getElementById('aiFilterType').value;
+      const location = document.getElementById('aiFilterLocation').value;
+      const status = document.getElementById('aiFilterStatus').value;
+      const dateFrom = document.getElementById('aiFilterDateFrom').value;
+      const dateTo = document.getElementById('aiFilterDateTo').value;
+      const query = document.getElementById('aiPromptInput').value.trim().toLowerCase();
+
+      aiToolFiltered = aiToolRecords.filter((r) => {
+        if (company && r.company !== company) return false;
+        if (type && r.meterType !== type) return false;
+        if (location && r.location !== location) return false;
+        if (status && r.statusLabel !== status) return false;
+
+        const recordDate = r.readingDateText.slice(0, 10);
+        if (dateFrom && recordDate < dateFrom) return false;
+        if (dateTo && recordDate > dateTo) return false;
+
+        if (query) {
+          const haystack = `${r.meterId} ${r.company} ${r.location} ${r.meterType} ${r.aiAssessment}`.toLowerCase();
+          if (!haystack.includes(query)) return false;
+        }
+
+        return true;
+      });
+
+      aiToolPage = 1;
+      renderAiTable();
+    }
+
+    function runAiPromptSearch() {
+      const query = document.getElementById('aiPromptInput').value.trim();
+      applyAiFilters();
+      const resultEl = document.getElementById('aiPromptResult');
+      resultEl.textContent = query
+        ? `«${query}» хайлтад ${aiToolFiltered.length} тоолуур олдлоо.`
+        : 'Түлхүүр үг оруулаад хүсэлт илгээхэд Meter ID, байгууллага, байршил, төрөл, AI дүгнэлт талбаруудаас хайна.';
+    }
+
+    function renderAiTable() {
+      const totalPages = Math.max(1, Math.ceil(aiToolFiltered.length / aiToolPageSize));
+      aiToolPage = Math.min(Math.max(1, aiToolPage), totalPages);
+
+      const start = (aiToolPage - 1) * aiToolPageSize;
+      const pageRecords = aiToolFiltered.slice(start, start + aiToolPageSize);
+
+      const assessmentDotClass = {
+        'Хэвийн': 'legend-online',
+        'Хэрэглээ ихэссэн': 'legend-warning',
+        'Хэвийн бус хэлбэлзэл': 'legend-offline',
+        'Уншилт ирээгүй': 'legend-muted',
+      };
+
+      const statusPillClass = {
+        'Идэвхтэй': 'status-healthy',
+        'Сэрэмжлүүлэгтэй': 'status-weak',
+        'Идэвгүй': 'status-offline',
+      };
+
+      document.getElementById('aiTableBody').innerHTML = pageRecords
+        .map(
+          (r, i) => `<tr>
+            <td class="col-checkbox"><input type="checkbox" class="ai-row-checkbox" /></td>
+            <td>${start + i + 1}</td>
+            <td>${r.meterId}</td>
+            <td>${r.company}</td>
+            <td><span class="tag-pill ${tagColorClass(r.meterType)}">${r.meterType}</span></td>
+            <td>${r.location}</td>
+            <td>${r.lastReadingText}</td>
+            <td>${r.readingDateText}</td>
+            <td>${r.periodUsageText}</td>
+            <td><span class="status-pill ${statusPillClass[r.statusLabel]}">${r.statusLabel}</span></td>
+            <td><span class="conn-cell"><span class="legend-dot ${assessmentDotClass[r.aiAssessment]}"></span>${r.aiAssessment}</span></td>
+          </tr>`
+        )
+        .join('');
+
+      const end = Math.min(aiToolFiltered.length, start + pageRecords.length);
+      document.getElementById('aiTableSummary').textContent =
+        `Нийт ${aiToolFiltered.length.toLocaleString('en-US')} бичлэгээс ${aiToolFiltered.length === 0 ? 0 : start + 1}-${end} харуулж байна`;
+      document.getElementById('aiPageIndicator').textContent = `${aiToolPage} / ${totalPages}`;
+      document.getElementById('aiPrevPageButton').disabled = aiToolPage <= 1;
+      document.getElementById('aiNextPageButton').disabled = aiToolPage >= totalPages;
+
+      const selectAll = document.getElementById('aiSelectAll');
+      if (selectAll) selectAll.checked = false;
+    }
+
+    function exportAiToolCsv() {
+      const header = ['Meter ID', 'Байгууллагын нэр', 'Тоолуурын төрөл', 'Байршил', 'Сүүлийн уншилт', 'Уншилтын огноо', 'Хэрэглээ (кВт.ц)', 'Статус', 'AI дүгнэлт'];
+      const lines = [header.join(',')];
+
+      aiToolFiltered.forEach((r) => {
+        const fields = [r.meterId, r.company, r.meterType, r.location, r.lastReadingText, r.readingDateText, r.periodUsageText, r.statusLabel, r.aiAssessment];
+        lines.push(fields.map((f) => `"${String(f).replace(/"/g, '""')}"`).join(','));
+      });
+
+      const blob = new Blob([`﻿${lines.join('\n')}`], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ai-tool-meters-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function renderAiAssessmentChart(records) {
+      const categories = [
+        { label: 'Хэвийн', color: '#10b981' },
+        { label: 'Хэрэглээ ихэссэн', color: '#f59e0b' },
+        { label: 'Хэвийн бус хэлбэлзэл', color: '#ef4444' },
+        { label: 'Уншилт ирээгүй', color: '#94a3b8' },
+      ];
+
+      const counts = categories.map((c) => records.filter((r) => r.aiAssessment === c.label).length);
+      const total = records.length;
+
+      document.getElementById('aiAssessmentTotal').textContent = total.toLocaleString('en-US');
+
+      document.getElementById('aiAssessmentLegend').innerHTML = categories
+        .map((c, i) => {
+          const pct = total > 0 ? Math.round((counts[i] / total) * 100) : 0;
+          return `<li><span class="legend-dot" style="background:${c.color}"></span>${c.label}<strong>${pct}% (${counts[i]})</strong></li>`;
+        })
+        .join('');
+
+      const ctx = document.getElementById('aiAssessmentChart').getContext('2d');
+      if (aiAssessmentChart) aiAssessmentChart.destroy();
+      aiAssessmentChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: categories.map((c) => c.label),
+          datasets: [{ data: counts, backgroundColor: categories.map((c) => c.color), borderWidth: 0 }],
+        },
+        options: { cutout: '72%', plugins: { legend: { display: false } } },
+      });
+    }
+
+    function renderAiUsageChart(records) {
+      const activeCount = records.filter((r) => r.statusLabel === 'Идэвхтэй').length;
+      const warningCount = records.filter((r) => r.statusLabel === 'Сэрэмжлүүлэгтэй').length;
+      const inactiveCount = records.filter((r) => r.statusLabel === 'Идэвгүй').length;
+
+      const days = [];
+      const activeSeries = [];
+      const warningSeries = [];
+      const inactiveSeries = [];
+
+      for (let i = 13; i >= 0; i -= 1) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        days.push(`${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`);
+
+        const wobble = Math.sin(i * 1.3);
+        activeSeries.push(Math.max(0, Math.round(activeCount + wobble * activeCount * 0.02)));
+        warningSeries.push(Math.max(0, Math.round(warningCount + wobble * warningCount * 0.15)));
+        inactiveSeries.push(Math.max(0, Math.round(inactiveCount + wobble * inactiveCount * 0.08)));
+      }
+
+      const ctx = document.getElementById('aiUsageChart').getContext('2d');
+      if (aiUsageChart) aiUsageChart.destroy();
+      aiUsageChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: days,
+          datasets: [
+            { label: 'Идэвхтэй', data: activeSeries, borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.08)', fill: true, tension: 0.35, pointRadius: 0, borderWidth: 2 },
+            { label: 'Сэрэмжлүүлэгтэй', data: warningSeries, borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.08)', fill: true, tension: 0.35, pointRadius: 0, borderWidth: 2 },
+            { label: 'Идэвгүй', data: inactiveSeries, borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.08)', fill: true, tension: 0.35, pointRadius: 0, borderWidth: 2 },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: true, position: 'top', labels: { boxWidth: 10, font: { size: 11 } } } },
+          scales: { x: { ticks: { maxTicksLimit: 7 } }, y: { beginAtZero: true } },
+        },
+      });
+    }
+
+    function renderAiRecentAlerts(records) {
+      const alertIcon = {
+        'Хэрэглээ ихэссэн': { bg: 'icon-orange', path: '<path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/>' },
+        'Хэвийн бус хэлбэлзэл': {
+          bg: 'icon-red',
+          path: '<path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>',
+        },
+        'Уншилт ирээгүй': { bg: 'icon-cyan', path: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>' },
+      };
+
+      const alerts = records
+        .filter((r) => r.aiAssessment !== 'Хэвийн')
+        .sort((a, b) => b.readingDate - a.readingDate)
+        .slice(0, 6);
+
+      document.getElementById('aiRecentAlerts').innerHTML = alerts
+        .map((r) => {
+          const icon = alertIcon[r.aiAssessment] || alertIcon['Уншилт ирээгүй'];
+          const time = r.readingDateText.slice(11);
+          return `<li>
+            <span class="alert-icon ${icon.bg}"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon.path}</svg></span>
+            <span class="alert-body">
+              <div class="alert-title">${r.aiAssessment}</div>
+              <div class="alert-sub">${r.meterId} - ${r.location}</div>
+            </span>
+            <span class="alert-time">${time}</span>
+          </li>`;
+        })
+        .join('');
+    }
+
+    let aiChartsRendered = false;
+    function renderAiCharts() {
+      if (aiChartsRendered || aiToolRecords.length === 0) return;
+      aiChartsRendered = true;
+      renderAiUsageChart(aiToolRecords);
+      renderAiAssessmentChart(aiToolRecords);
+    }
+
+    function setupAiToolView() {
+      if (aiToolInitialized) return;
+      aiToolInitialized = true;
+
+      ['aiFilterCompany', 'aiFilterType', 'aiFilterLocation', 'aiFilterStatus', 'aiFilterDateFrom', 'aiFilterDateTo'].forEach((id) => {
+        document.getElementById(id).addEventListener('change', applyAiFilters);
+      });
+
+      document.getElementById('aiApplyFiltersButton').addEventListener('click', applyAiFilters);
+
+      document.getElementById('aiPromptButton').addEventListener('click', runAiPromptSearch);
+      document.getElementById('aiPromptInput').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') runAiPromptSearch();
+      });
+
+      document.getElementById('aiExportButton').addEventListener('click', exportAiToolCsv);
+      document.getElementById('aiFullscreenButton').addEventListener('click', toggleFullscreen);
+
+      document.getElementById('aiManageColumnsButton').addEventListener('click', () => {
+        document.getElementById('aiPromptResult').textContent = 'Багана удирдах тохиргоо удахгүй нэмэгдэнэ.';
+      });
+
+      document.getElementById('aiSelectAll').addEventListener('change', (e) => {
+        document.querySelectorAll('#aiTableBody .ai-row-checkbox').forEach((cb) => {
+          cb.checked = e.target.checked;
+        });
+      });
+
+      document.getElementById('aiPageSizeSelect').addEventListener('change', (e) => {
+        aiToolPageSize = Number(e.target.value);
+        aiToolPage = 1;
+        renderAiTable();
+      });
+
+      document.getElementById('aiPrevPageButton').addEventListener('click', () => {
+        aiToolPage -= 1;
+        renderAiTable();
+      });
+
+      document.getElementById('aiNextPageButton').addEventListener('click', () => {
+        aiToolPage += 1;
+        renderAiTable();
+      });
+    }
+
+    async function loadDashboard() {
+      let profile;
+      try {
+        const response = await fetch('/api/profile', { credentials: 'include' });
+        const ct = response.headers.get('content-type') || '';
+        if (!response.ok || !ct.includes('application/json')) {
+          window.location.href = '/index.html';
+          return;
+        }
+        profile = await response.json();
+      } catch (error) {
+        console.error('Profile check failed:', error);
+        window.location.href = '/index.html';
+        return;
+      }
+
+      document.getElementById('welcome').textContent = profile.name || profile.username || profile.email || 'Engineer';
+
+      try {
+        const meterResponse = await fetch('/api/meters', { credentials: 'include' });
+        if (!meterResponse.ok) {
+          throw new Error('Meter data fetch failed');
+        }
+        const data = await meterResponse.json();
+
+        document.getElementById('totalMeters').textContent = data.totalMeters;
+        document.getElementById('connectedMeters').textContent = data.connectedMeters;
+        document.getElementById('disconnectedMeters').textContent = data.disconnectedMeters;
+
+        const connectedPct = data.totalMeters > 0 ? Math.round((data.connectedMeters / data.totalMeters) * 100) : 0;
+        const disconnectedPct = data.totalMeters > 0 ? 100 - connectedPct : 0;
+        document.getElementById('connectedMetersPct').textContent = `${connectedPct}%`;
+        document.getElementById('disconnectedMetersPct').textContent = `${disconnectedPct}%`;
+
+        const openAlarms = Math.max(0, data.disconnectedMeters);
+        document.getElementById('openAlarms').textContent = openAlarms;
+
+        // Sample DCU figures derived loosely from meter count (no DCU table yet).
+        const dcuTotal = Math.max(1, Math.round(data.totalMeters * 1.4));
+        const dcuOnline = Math.max(0, dcuTotal - Math.max(1, Math.round(data.disconnectedMeters * 0.6)));
+        document.getElementById('dcuOnlinePct').textContent = `${Math.round((dcuOnline / dcuTotal) * 100)}%`;
+        document.getElementById('dcuOnlineFraction').textContent = `${dcuOnline} / ${dcuTotal}`;
+
+        document.getElementById('energyTodayValue').textContent = `${data.totalEnergy.toFixed(1)} kWh`;
+        document.getElementById('peakLoadValue').textContent = `${(data.totalEnergy / 20).toFixed(1)} kW`;
+        const powerFactor = (0.92 + Math.random() * 0.06).toFixed(2);
+        document.getElementById('powerFactorValue').textContent = powerFactor;
+
+        meterListRecords = buildMeterListRecords(data.meters);
+        populateMeterFilters(meterListRecords);
+        renderMeterListStats(meterListRecords);
+        setupMeterListView();
+        meterListFiltered = meterListRecords;
+        renderMeterListTable();
+
+        aiToolRecords = buildAiToolRecords(data.meters);
+        populateAiFilters(aiToolRecords);
+        renderAiStats(aiToolRecords);
+        setupAiToolView();
+        aiToolFiltered = aiToolRecords;
+        renderAiTable();
+        renderAiRecentAlerts(aiToolRecords);
+
+        renderCommHealthChart(data.connectedMeters, data.disconnectedMeters);
+      } catch (error) {
+        console.error('Dashboard data load failed:', error);
+        document.getElementById('description').textContent = 'Тоолуурын мэдээлэл ачаалахад алдаа гарлаа. Хуудсыг дахин ачаална уу.';
+      }
+    }
+
+    document.getElementById('signOutButton').addEventListener('click', async () => {
+      await fetch('/logout', { method: 'POST', credentials: 'include' });
+      window.location.href = '/index.html';
+    });
+
+    // The main content area is a tiny single-page router: exactly one
+    // .view section is visible at a time, swapped by the sidebar clicks.
+    function showView(viewId, title) {
+      document.querySelectorAll('.main-area > .view').forEach((view) => {
+        view.hidden = view.id !== viewId;
+      });
+
+      const defaultTitles = {
+        'view-dashboard': 'Smart Meter Engineering Dashboard',
+        'view-meter': 'Тоолуурын жагсаалт',
+        'view-meter-model': 'Тоолуурын загвар',
+        'view-meter-connection': 'Тоолуурын холболтын бүтэц',
+        'view-ai-tool': 'AI Tool',
+      };
+      document.getElementById('pageTitle').textContent = title || defaultTitles[viewId] || 'Smart Meter';
+
+      document.querySelector('.main-area').scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Only one sidebar group stays expanded at a time, so the menu doesn't
+    // grow tall with every group left open.
+    function collapseGroupsExcept(exceptGroup) {
+      document.querySelectorAll('.nav-group').forEach((group) => {
+        if (group !== exceptGroup && group.querySelector('.nav-group-title')) {
+          group.classList.add('collapsed');
+        }
+      });
+    }
+
+    // Make every sidebar menu item respond to clicks: highlight itself as
+    // active and either jump to its section (Dashboard / Meter) or show a
+    // "coming soon" note for sections that don't have a page yet.
+    function setupSidebarNav() {
+      const navLinks = document.querySelectorAll('.sidebar-nav .nav-link');
+      const description = document.getElementById('description');
+      const defaultDescription = description.textContent;
+
+      navLinks.forEach((link) => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+
+          navLinks.forEach((l) => l.classList.remove('active'));
+          link.classList.add('active');
+
+          // Selecting an item collapses any other expanded group.
+          collapseGroupsExcept(link.closest('.nav-group'));
+
+          if (link.id === 'nav-dashboard') {
+            description.textContent = defaultDescription;
+            showView('view-dashboard');
+            return;
+          }
+
+          if (link.id === 'nav-meter') {
+            description.textContent = 'Бүх тоолуурын жагсаалт, төлөв, эрчим хүчний хэрэглээ.';
+            showView('view-meter');
+            return;
+          }
+
+          if (link.id === 'nav-meter-model') {
+            description.textContent = 'Тоолуурын загварын каталог: марк, модель, стандарт, дэлгэрэнгүй үзүүлэлт.';
+            showView('view-meter-model');
+            setupMeterModelView();
+            loadMeterModels();
+            return;
+          }
+
+          if (link.id === 'nav-meter-connection') {
+            description.textContent = 'Тоолуур бүрийн тэжээл болон холбогдсон цэгийн шатлал.';
+            showView('view-meter-connection', 'Тоолуурын холболтын бүтэц');
+            setupMeterConnectionView();
+            loadNetworkTree();
+            return;
+          }
+
+          if (link.id === 'nav-survey-results') {
+            description.textContent = 'Тоолуурын алсын уншилт, удирдлага, HES холболтын бэлэн байдлын судалгаа.';
+            showView('view-survey-results', 'Судалгааны үр дүн');
+            loadSurveyResults();
+            return;
+          }
+
+          if (link.id === 'nav-ai-tool') {
+            description.textContent = 'AI дүгнэлт, шүүлтүүр бүхий тоолуурын жагсаалт.';
+            showView('view-ai-tool');
+            renderAiCharts();
+            return;
+          }
+
+          const label = link.querySelector('.nav-label')?.textContent.trim() || link.textContent.trim();
+          description.textContent = `«${label}» хэсэг удахгүй нэмэгдэнэ.`;
+          document.getElementById('placeholderTitle').textContent = label;
+          showView('view-placeholder', label);
+        });
+      });
+    }
+
+    // Accordion sidebar: clicking a group title (e.g. "Asset Management")
+    // expands/collapses its menu items (Meter, DCU, Transformer, Building...).
+    function setupSidebarGroups() {
+      const groups = document.querySelectorAll('.nav-group');
+
+      groups.forEach((group) => {
+        const title = group.querySelector('.nav-group-title');
+        if (!title) return;
+
+        // Start collapsed, except the group that already holds the active link.
+        if (!group.querySelector('.nav-link.active')) {
+          group.classList.add('collapsed');
+        }
+
+        title.addEventListener('click', () => {
+          const willExpand = group.classList.contains('collapsed');
+          collapseGroupsExcept(group);
+          group.classList.toggle('collapsed', !willExpand);
+        });
+      });
+    }
+
+    startClock();
+    setupProfileMenu();
+    setupFullscreenButton();
+    setupSidebarGroups();
+    setupSidebarNav();
+
+    renderGisMap();
+    renderAlarmSummary();
+    renderOfflineDcuTable();
+    renderRecentEvents();
+    renderDcuSignalChart();
+    renderLoadProfileChart();
+    renderReadSuccessChart();
+
+    loadDashboard();
+  </script>
+</body>
+</html>

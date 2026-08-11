@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Meter Login</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="login-card">
+    <h1>Нэвтрэх</h1>
+    <form id="loginForm">
+      <label for="username">Нэвтрэх нэр</label>
+      <input type="text" id="username" name="username" placeholder="nevtrekh_nere" required />
+
+      <label for="password">Нууц үг</label>
+      <input type="password" id="password" name="password" placeholder="99996060" required />
+
+      <button type="submit">Нэвтрэх</button>
+    </form>
+
+    <div class="divider"><span>эсвэл</span></div>
+    <div id="message" class="message"></div>
+    <p class="hint">Тест хэрэглэгч: admin / admin</p>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
